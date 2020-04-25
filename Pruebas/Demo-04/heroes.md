@@ -5,3 +5,6 @@
 * Daredevil
 * Aquaman
 * Mujer Maravilla
+* linterna verde
+* otro heroe
+
