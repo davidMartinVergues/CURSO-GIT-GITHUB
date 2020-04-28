@@ -2,3 +2,6 @@
 /Teoria/.*
 /.directory
 /T1_GIT_Basico/Demo-05-tarea/logs/historia.log
+
+/T2_Ramas/demo-06/*.log
+/T2_Ramas/demo-06/node_modules/
