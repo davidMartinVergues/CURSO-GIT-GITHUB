@@ -5,3 +5,4 @@
 
 /T2_Ramas/demo-06/*.log
 /T2_Ramas/demo-06/node_modules/
+/T2_Ramas/demo-06/.*
