@@ -6,3 +6,13 @@
 /T2_Ramas/demo-06/*.log
 /T2_Ramas/demo-06/node_modules/
 /T2_Ramas/demo-06/.*
+
+/T3_Stash_Rebase/demo-07/*.log
+/T3_Stash_Rebase/demo-07/node_modules/
+/T3_Stash_Rebase/demo-07/.*
+
+/T3_Stash_Rebase/demo-08/*.log
+/T3_Stash_Rebase/demo-08/node_modules/
+/T3_Stash_Rebase/demo-08/.*
+
+
