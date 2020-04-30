@@ -15,4 +15,8 @@
 /T3_Stash_Rebase/demo-08/node_modules/
 /T3_Stash_Rebase/demo-08/.*
 
+T4_GitHub_Remote_push&Pull/demo-09/*.log
+T4_GitHub_Remote_push&Pull/demo-09/node_modules/
+T4_GitHub_Remote_push&Pull/demo-09/demo-08/.*
+
 
