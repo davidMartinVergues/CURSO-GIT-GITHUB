@@ -21,13 +21,38 @@
   - [git checkout](#git-checkout)
   - [git reset](#git-reset)
   - [git commit --amend](#git-commit---amend)
-- [p, pick = use commit](#p-pick--use-commit)
-- [r, reword = use commit, but edit the commit message](#r-reword--use-commit-but-edit-the-commit-message)
-- [e, edit = use commit, but stop for amending](#e-edit--use-commit-but-stop-for-amending)
-- [s, squash = use commit, but meld into previous commit](#s-squash--use-commit-but-meld-into-previous-commit)
-- [f, fixup = like "squash", but discard this commit's log message](#f-fixup--like-squash-but-discard-this-commits-log-message)
-- [x, exec = run command (the rest of the line) using shell](#x-exec--run-command-the-rest-of-the-line-using-shell)
-- [d, drop = remove commit](#d-drop--remove-commit)
+  - [git revert](#git-revert)
+  - [git branch](#git-branch)
+  - [git checkout](#git-checkout-1)
+  - [git branch](#git-branch-1)
+  - [git checkout -b branch_name](#git-checkout--b-branch_name)
+  - [git branch -d branch_name](#git-branch--d-branch_name)
+  - [git merge branch_name](#git-merge-branch_name)
+  - [git log --graph --oneline](#git-log---graph---oneline)
+  - [git log --graph --online --all](#git-log---graph---online---all)
+  - [git merge --abort](#git-merge---abort)
+  - [git add remote](#git-add-remote)
+  - [git remote -v](#git-remote--v)
+  - [git remote show origin](#git-remote-show-origin)
+  - [git push](#git-push)
+  - [git pull](#git-pull)
+  - [git branch -r](#git-branch--r)
+  - [git fetch](#git-fetch)
+  - [git log origin/nombreRama](#git-log-originnombrerama)
+  - [git merge origin/master](#git-merge-originmaster)
+  - [git remote update](#git-remote-update)
+  - [git push -u origin branch_name](#git-push--u-origin-branch_name)
+  - [git push --delete origin branch_name_here](#git-push---delete-origin-branch_name_here)
+  - [git rebase branch_name_here](#git-rebase-branch_name_here)
+  - [git push -f](#git-push--f)
+- [Flags en GIT status](#flags-en-git-status)
+  - [C: copy of a file into a new one](#c-copy-of-a-file-into-a-new-one)
+  - [D: deletion of a file](#d-deletion-of-a-file)
+  - [M: modification of the contents or mode of a file](#m-modification-of-the-contents-or-mode-of-a-file)
+  - [R: renaming of a file](#r-renaming-of-a-file)
+  - [T: change in the type of the file](#t-change-in-the-type-of-the-file)
+  - [X: "unknown" change type (most probably a bug, please report it)](#x-unknown-change-type-most-probably-a-bug-please-report-it)
+- [Tema 5 Undoing mistakes](#tema-5-undoing-mistakes)
 
 # Curso de Git y GitHub 
 
@@ -897,9 +922,12 @@ git diff shows only unstaged changes by default.
 
 We can call diff with the --staged flag to see any staged changes.
 
+```javascript
+
 git diff
 git diff all_checks.py
 git diff --staged
+```
 
 ## git add -p
 
@@ -963,160 +991,282 @@ git reset HEAD -p
 
 ## git commit --amend
 
-How to amend the most recent commit in Git:
+How to amend(enmendar) the most recent commit in Git:
 
 git commit --amend allows you to modify and add changes to the most recent commit.
 
+```javascript
 git commit --amend
+```
 
 !!Note!!: fixing up a local commit with amend is great and you can push it to a shared repository after you've fixed it. But you should avoid amending commits that have already been made public.
-How to rollback the last commit in Git:
+
+## git revert
+
+How to rollback the last commit in Git
 
 git revert will create a new commit that is the opposite of everything in the given commit.
 We can revert the latest commit by using the head alias like this:
 
+```javascript
 git revert HEAD
+
+```
 
 How to rollback an old commit in Git:
 
 You can revert an old commit using its commit id. This opens the editor so you can add a commit message.
 
+```javascript
 git revert comit_id_here
 
-How to create a new branch in Git:
+```
+
+## git branch
+
+How to create a new branch in Git
 
 By default, you have one branch, the main branch. With this command, you can create a new branch. Git won't switch to it automatically – you will need to do it manually with the next command.
 
+```javascript
 git branch branch_name
 
-How to switch to a newly created branch in Git:
+```
+
+## git checkout
+
+How to switch to a newly created branch in Git
 
 When you want to use a different or a newly created branch you can use this command:
 
+```javascript
 git checkout branch_name
+
+```
+
+## git branch
 
 How to list branches in Git:
 
 You can view all created branches using the git branch command. It will show a list of all branches and mark the current branch with an asterisk and highlight it in green.
 
+```javascript
+
 git branch
+```
+
+## git checkout -b branch_name
 
 How to create a branch in Git and switch to it immediately:
 
 In a single command, you can create and switch to a new branch right away.
 
+```javascript
 git checkout -b branch_name
+
+```
+
+## git branch -d branch_name
 
 How to delete a branch in Git:
 
 When you are done working with a branch and have merged it, you can delete it using the command below:
 
+```javascript
+
 git branch -d branch_name
+```
+
+## git merge branch_name
 
 How to merge two branches in Git:
 
 To merge the history of the branch you are currently in with the branch_name, you will need to use the command below:
 
+```javascript
+
 git merge branch_name
+```
+
+## git log --graph --oneline
 
 How to show the commit log as a graph in Git:
 
 We can use --graph to get the commit log to show as a graph. Also,
 --oneline will limit commit messages to a single line.
 
+```javascript
+
 git log --graph --oneline
+```
+
+## git log --graph --online --all
 
 How to show the commit log as a graph of all branches in Git:
 
 Does the same as the command above, but for all branches.
 
+```javascript
+
 git log --graph --online --all
+```
+
+## git merge --abort
 
 How to abort a conflicting merge in Git:
 
 If you want to throw a merge away and start over, you can run the following command:
 
+```javascript
+
 git merge --abort
+```
+
+## git add remote
 
 How to add a remote repository in Git
 
 This command adds a remote repository to your local repository (just replace https://repo_here with your remote repo URL).
 
+```javascript
+
 git add remote https://repo_here
+```
+
+## git remote -v
 
 How to see remote URLs in Git:
 
 You can see all remote repositories for your local repository with this command:
 
+```javascript
+
 git remote -v
+```
+
+## git remote show origin
 
 How to get more info about a remote repo in Git:
 
 Just replace origin with the name of the remote obtained by
 running the git remote -v command.
 
+```javascript
+
 git remote show origin
+```
+
+## git push
 
 How to push changes to a remote repo in Git:
 
 When all your work is ready to be saved on a remote repository, you can push all changes using the command below:
 
+```javascript
+
 git push
+```
+
+## git pull
 
 How to pull changes from a remote repo in Git:
 
 If other team members are working on your repository, you can retrieve the latest changes made to the remote repository with the command below:
 
+```javascript
 git pull
+
+```
+
+## git branch -r
 
 How to check remote branches that Git is tracking:
 
 This command shows the name of all remote branches that Git is tracking for the current repository:
 
+```javascript
 git branch -r
+```
+
+## git fetch
 
 How to fetch remote repo changes in Git:
 
 This command will download the changes from a remote repo but will not perform a merge on your local branch (as git pull does that instead).
 
+```javascript
+
 git fetch
+```
+
+## git log origin/nombreRama
+
+normalmente el nombre que le damos a la rema en remoto es master o main
 
 How to check the current commits log of a remote repo in Git
 
 Commit after commit, Git builds up a log. You can find out the remote repository log by using this command:
 
-git log origin/main
+```javascript
+git log origin/master
+
+```
+
+## git merge origin/master
 
 How to merge a remote repo with your local repo in Git:
 
 If the remote repository has changes you want to merge with your local, then this command will do that for you:
 
+```javascript
 git merge origin/main
+
+```
+
+## git remote update
 
 How to get the contents of remote branches in Git without automatically merging:
 
 This lets you update the remote without merging any content into the
 local branches. You can call git merge or git checkout to do the merge.
 
+```javascript
 git remote update
+
+```
+
+## git push -u origin branch_name
 
 How to push a new branch to a remote repo in Git:
 
 If you want to push a branch to a remote repository you can use the command below. Just remember to add -u to create the branch upstream:
 
+```javascript
+
 git push -u origin branch_name
+```
+
+## git push --delete origin branch_name_here
 
 How to remove a remote branch in Git:
 
 If you no longer need a remote branch you can remove it using the command below:
 
+```javascript
+
 git push --delete origin branch_name_here
+```
+
+## git rebase branch_name_here
 
 How to use Git rebase:
 
 You can transfer completed work from one branch to another using git rebase.
 
+```javascript
 git rebase branch_name_here
+
+```
 
 Git Rebase can get really messy if you don't do it properly. Before using this command I suggest that you re-read the official documentation here
 How to run rebase interactively in Git:
@@ -1124,25 +1274,45 @@ How to run rebase interactively in Git:
 You can run git rebase interactively using the -i flag.
 It will open the editor and present a set of commands you can use.
 
+```javascript
 git rebase -i master
 
-# p, pick = use commit
+```
 
-# r, reword = use commit, but edit the commit message
+p, pick = use commit
+r, reword = use commit, but edit the commit message
+e, edit = use commit, but stop for amending
+s, squash = use commit, but meld into previous commit
+f, fixup = like "squash", but discard this commit's log message
+x, exec = run command (the rest of the line) using shell
+d, drop = remove commit
 
-# e, edit = use commit, but stop for amending
-
-# s, squash = use commit, but meld into previous commit
-
-# f, fixup = like "squash", but discard this commit's log message
-
-# x, exec = run command (the rest of the line) using shell
-
-# d, drop = remove commit
+## git push -f
 
 How to force a push request in Git:
 
 This command will force a push request. This is usually fine for pull request branches because nobody else should have cloned them.
 But this isn't something that you want to do with public repos.
 
+```javascript
+
 git push -f
+```
+
+# Flags en GIT status
+
+## C: copy of a file into a new one
+
+## D: deletion of a file
+
+## M: modification of the contents or mode of a file
+
+## R: renaming of a file
+
+## T: change in the type of the file
+
+## X: "unknown" change type (most probably a bug, please report it)
+
+# Tema 5 Undoing mistakes
+
+##
