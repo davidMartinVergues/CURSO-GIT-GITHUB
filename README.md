@@ -3,6 +3,15 @@
   - [¿Cómo funciona GIT?](#cómo-funciona-git)
   - [Primeros pasos](#primeros-pasos)
   - [Usando usuarios diferentes de manera local](#usando-usuarios-diferentes-de-manera-local)
+  - [Tipos de add](#tipos-de-add)
+  - [Dejar de seguir archivos](#dejar-de-seguir-archivos)
+  - [Como revisar el log](#como-revisar-el-log)
+  - [Creando alias](#creando-alias)
+- [TEMA 2](#tema-2)
+  - [Uso de diff](#uso-de-diff)
+  - [Reset, sacando del stage](#reset-sacando-del-stage)
+  - [Modificar mensaje del commit (--amend)](#modificar-mensaje-del-commit---amend)
+  - [Reset --soft modificando un commit](#reset---soft-modificando-un-commit)
 - [Comandos útiles](#comandos-útiles)
   - [config -l](#config--l)
   - [config --global](#config---global)
@@ -45,13 +54,6 @@
   - [git push --delete origin branch_name_here](#git-push---delete-origin-branch_name_here)
   - [git rebase branch_name_here](#git-rebase-branch_name_here)
   - [git push -f](#git-push--f)
-- [Flags en GIT status](#flags-en-git-status)
-  - [C: copy of a file into a new one](#c-copy-of-a-file-into-a-new-one)
-  - [D: deletion of a file](#d-deletion-of-a-file)
-  - [M: modification of the contents or mode of a file](#m-modification-of-the-contents-or-mode-of-a-file)
-  - [R: renaming of a file](#r-renaming-of-a-file)
-  - [T: change in the type of the file](#t-change-in-the-type-of-the-file)
-  - [X: "unknown" change type (most probably a bug, please report it)](#x-unknown-change-type-most-probably-a-bug-please-report-it)
 - [Tema 5 Undoing mistakes](#tema-5-undoing-mistakes)
 
 # Curso de Git y GitHub 
@@ -62,6 +64,10 @@
 
 Básicamente con git conseguimos tener un proyecto distribuido. A ese proyecto de le denomina repositorio. Distribuido significa que cada integrante del proyecto tiene una copia de ese repositorio en local.
 Git establece una línea del tiempo desde que se crea el repo hasta el día de hoy. Durante esa línea del tiempo vamos tomando fotografías de como se encuentra el proyecto, los llamados commits, de tal manera que siempre podremos volver a alguno de esos momentos.
+
+Cosas a tener en cuenta:
+
+Al importar un repositorio hecho en Linux en un entorno Windows el final de las líneas es diferente, en Linux usan LF (line feed) y en Windows CR (carriage return).
 
 ## Primeros pasos
 
@@ -74,17 +80,29 @@ git config --global user.name david-winux
 git config --global user.email dmverges@gmail.com
 ```
 
+```
+git config --global user.name "david winux"
+
+```
+
 Para saber si se ha guardado bien hacemos
 
 ```
 git config --list --global
 ```
 
-Podemos ir directamente al archivo q almacena esta información en `.gitconfig` y alterarla (no recomendable) mediante el comando:
+![not found](img/img-2.png)
+
+Podemos ir directamente al archivo q almacena esta información en `~/.gitconfig` (en nuestro directorio) y alterarla (no recomendable) mediante el comando:
 
 ```
 git config --global -e
 ```
+
+![not found](img/img-3.png)
+
+El repositorio local esta compuesto por tres "árboles" administrados por git. El primero es el Directorio de trabajo que contiene los archivos, el segundo es el Index(stage) que actua como una zona intermedia, y el último es el HEAD que apunta al último commit realizado.
+![not found](img/img-5.png)
 
 ## Usando usuarios diferentes de manera local
 
@@ -119,106 +137,255 @@ git init
 
 Luego creamos nuestros archivos
 
-Cuando queremos ver el estado de git usamos `git status` y si hay cambios que hay que incluir usamos `git add`.
+Cuando queremos ver el estado de git usamos `git status`
 
 ![not found](img/img-1.png)
 
-Al importar un repositorio hecho en Linux en un entorno Windows el final de las líneas en diferente, en Linux usan LF (line feed) y en Windows CR (carriage return).
-Para tomar la foto del proyecto actual usamos commit -m “mensaje”
+En satus nos separa los cambios hechos sobre archivos que ya están en seguimiento(ya se han registrado alguna vez) y archivos no rastreados (untracked)
 
-Con git init inicializamos el repositorio. Creamos los archivos necesarios. Con git add . ó nombre del archivo añadimos al stage esos archivos, después hacemos un commit que toma una foto de todos los archivos que hay colocados en el stage (escenario) para que git pueda registrar como se encuentran.
+Para poder registrar estos cambios o archivos/carpetas nuevos usamos:
 
-Si queremos descartar algún tipo de archivo, para q no sea seguido por git creamos un archivo .gitignore con la ruta a los archivos que no queremos controlar.
+```
+git add .
+```
 
-USAMOS: CHECKOUT LOG
-Imaginemos que por error modificamos un archivo o eliminamos su contenido. Con el comando checkout recuperamos el proyecto como estaba en el último commit. Esto también sirve para recuperar carpetas borradas
+El `.` indica que añada al stage todos los cambios realizados en el proyecto.
 
-A medida que vamos haciendo commits se va creando un registro con toda la información. Para acceder a este registro usamos log
+Esto los pone en el `stage`, es una zona previa donde se encuentran todos los cambios registrados para incluir en un commit.
+
+Para tomar la foto del proyecto actual usamos:
+
+```
+commit -m “mensaje”
+```
+
+Resumen:
+
+Con `git init` inicializamos el repositorio. Creamos los archivos necesarios. Con `git add .` ó nombre del archivo añadimos al stage esos archivos, después hacemos un `commit` que toma una foto de todos los archivos que hay colocados en el stage (escenario) para que git pueda registrar como se encuentran.
+
+Si queremos descartar algún tipo de archivo, para q no sea seguido por git creamos un archivo `.gitignore` con la ruta a los archivos que no queremos controlar.
+
+![not found](img/img-4.png)
+
+> USAMOS: CHECKOUT LOG
+
+Imaginemos que por error modificamos un archivo o eliminamos su contenido. Con el comando `checkout` recuperamos el proyecto como estaba en el último commit. Esto también sirve para recuperar carpetas borradas
+
+```javascript
+git checkout -- .
+```
+
+El comando `checkout`nos permite movernos entre ramas, en este caso `checkout -- .` lo que hace es reemplazar todos los cambios hechos en local con el contenido el `HEAD`.
+
+A medida que vamos haciendo commits se va creando un registro con toda la información. Para acceder a este registro usamos:
+
+```
+git log
+```
+
+![not found](img/img-6.png)
 
 Lo correcto sería hacer commits por archivos, es decir si tenemos varios archivos modificados incluir cada uno de los archivos por separado y hacer el commit. Por jemplo hago el commit solo del index.
-USAMOS: ADD \*.PNG ADD CSS/ GIT ADD -A RESET
+
+> USAMOS: ADD \*.PNG ADD CSS/ GIT ADD -A RESET
+
+![not found](img/img-7.png)
 
 En la imagen vemos como index está en el stage y el resto de archivos en rojo todavía no.
-Para añadir todos los archivos de un mismo tipo git add \*.png
+
+Para añadir todos los archivos de un mismo tipo
+
+```
+git add \*.png
+```
+
+![not found](img/img-8.png)
 
 Hacemos el commit indicando que trackeamos el index y las imágenes.
 
-Agregar toda una carpeta el stage
+```
+git commit -m "agregando index e imagenes"
 
-Con git add -A añadimos todos los archivos con cambios al stage pero si queremos descartar uno antes del commit hacemos un reset
+```
 
-Y lo podemos añadir a parte. Si hacemos un log veremos todo el regustro
+![not found](img/img-9.png)
 
-Tipos de add
+Agregar toda una carpeta el stage la de de css
 
-Git add “_.txt” => añade al stage los archivos txt modificados en todo el proyecto
-Git add _.txt => añade al stage los archivos txt modificados sólo en el directorio actual
-Git add . => agrega todos los archivos modificados del mismo directorio
-Git add - -all
-agrega todos los archivos modificados en todo el proyecto
-Git add -A
-Git add <file1.txt, file2.js> => agrega una lista de archivos.
-Git add carpeta/\*.pdf => agrega todos los archivos de un tipo dentro de una carpeta
-Git add carpeta/ => agrega todos los archivos dentro de una carpeta
+```
+git add css/
 
-Dejar de seguir archivos
+```
 
-Una vez sabemos cómo añadir archivos al stage/en seguimiento por git también es importante saber como hacer q git olvide estos archivos o dejarlos de seguir para ello usamos el comando
+![not found](img/img-10.png)
+
+`git add -A` añadimos todos los archivos con cambios al stage pero si queremos descartar uno antes del commit hacemos un reset
+
+```
+git add -A
+```
+
+```
+git reset *xml
+
+```
+
+## Tipos de add
+
+1. Git add “\_.txt” => añade al stage los archivos txt modificados en todo el proyecto
+
+2. Git add \_.txt => añade al stage los archivos txt modificados sólo en el directorio actual
+
+3. Git add . => agrega todos los archivos modificados del mismo directorio
+
+4. Git add --all
+   Git add -A
+   agrega todos los archivos modificados en todo el proyecto
+
+5. Git add <file1.txt, file2.js> => agrega una lista de archivos.
+
+6. Git add carpeta/\*.pdf => agrega todos los archivos de un tipo dentro de una carpeta
+
+7. Git add carpeta/ => agrega todos los archivos dentro de una carpeta
+
+## Dejar de seguir archivos
+
+Una vez sabemos cómo añadir archivos al stage/en seguimiento por git también es importante saber cómo hacer q git olvide estos archivos o dejarlos de seguir para ello usamos el comando
+
+```javascript
 git rm --cache nombreArchivo
 
-Como revisar el log
+```
 
-USAMOS: LOG --oneline --decorate --all –graph status -s -b
+## Como revisar el log
+
+> USAMOS: log --oneline --decorate --all –-graph status -s -b
+
 Cuando hacemos un log vemos el HEAD que nos indica el último commit de la rama en la que estamos, en este caso master
 
-Oneline
+Todos estos flags me servirán para ver mejor el log cuando tengamos ramas y merges…
 
-Todos estos parámetros me servirán para ver mejor el log cuando tengamos ramas y merges…
+```javascript
+--oneline --decorate --all –-graph
+```
 
-status -s (silence) -b (brach) reducir la info del status
+Para ver el status actual de una manera resumida usamos:
 
-En M rojo modificados pero fuera del stage y M verde modificado pero dentro del stage
-Creando alias
-Git s git lg
+```
+status -s -b
+```
+
+-s (silence) -b (brach)
+
+![not found](img/img-11.png)
+
+M rojo => modificados pero fuera del stage
+M verde => modificado pero dentro del stage
+
+El resto de flags de git status son:
+
+1. C: copy of a file into a new one
+
+2. D: deletion of a file
+
+3. M: modification of the contents or mode of a file
+
+4. R: renaming of a file
+
+5. T: change in the type of the file
+
+6. X: "unknown" change type (most probably a bug, please report it)
+
+## Creando alias
+
 Generar alias de forma global
+
+```
+git config --global alias.lg "log --oneline --decorate --all –-graph"
+```
+
+```
+git config --global alias.s "status -s -b"
+```
 
 Lo que va detrás del punto en alias es cómo se llamará mi alias, en este caso “lg”
 
 Para ver todas las configuraciones que vamos haciendo a nivel global hacemos un
-git config - -global -e ó también git config –global -l
+`git config --global -e` ó también `git config –global -l`
 
-TEMA 2
+# TEMA 2
 
-Más allá de los fundamentos
+## Uso de diff
 
-Uso de Diff
+> USAMOS: GIT DIFF –STAGED CHECKOUT – COMMIT -AM COMMIT –AMEND RESET --SOFT
 
-USAMOS: GIT DIFF –STAGED CHECKOUT – COMMIT -AM COMMIT –AMEND RESET --SOFT
 Para saber que modificaciones hicimos en un archivo hacemos un diff, nos da las modificaciones entre el último commit y el momento actual.
+
+```
+git diff
+```
+
+![not found](img/img-12.png)
 
 Incorporamos el archivo al stage
 
-Ahora al ejecutar diff no nos muestra nada para saber las modificaciones de una archivo que ya está en el stage le añadimos –staged
+![not found](img/img-13.png)
+
+Ahora al ejecutar diff no nos muestra nada para saber las modificaciones de una archivo que ya está en el stage le añadimos
+
+```
+git diff --staged
+```
 
 Para entender el diff (comparación):
-En verde o con el + / b es como está el archivo de la rama donde nos encontramos
-En rojo o con el - / a es lo diferente que trae el archivo con el q comaramos
 
-Reset, sacando del stage
+![not found](img/img-14.png)
+
+En verde o con el + / b es como está el archivo de la rama donde nos encontramos, es decir con los cambios  
+En rojo o con el - / a es como estaba el archivo en el último commit
+
+## Reset, sacando del stage
+
 Ahora después de ver las modificaciones consideramos que es mejor la versión anterior así q lo sacamos del stage con reset
 
-Checkout – para deshacer cambios
+```
+git reset README.md
+```
+
+![not found](img/img-15.png)
+
 Y lo volvemos a la versión anterior con checkout – nombreArchvo
 
+```
+git checkout -- README.md
+```
+
 Vemos como al hacer status ya no hay ningún archivo modificado pendiente de poner en el stage.
+![not found](img/img-16.png)
+
 Si volvemos a modificar el archivo README.md añadiendo texto, como es un archivo ya en seguimiento (tracked) podemos hacer un add + commit al mismo tiempo con commit --am.
 
-Modificar mensaje del commit (--amend)
-Como vemos el mensaje del commit está mal escrito para poder modificar un mensaje del commit usamos commit –amend. Esto lo que hace es sustituir el mensaje del último commit por el que nosotros introducimos.
+```
+git commit -am "actualizando el README.md"
+```
 
-Reset - -soft modificando un commit
+## Modificar mensaje del commit (--amend)
 
-Queremos modificar el archivo README pero esas modificaciones deben estar asociadas a ese commit para ello usamos reset –soft HEAD^ le coloco el ^ porque quiero volver al commit justo anterior a donde apunta HEAD, que es último.
+Como vemos el mensaje del commit está mal escrito para poder modificar un mensaje del commit usamos commit –amend(enmendar). Esto lo que hace es sustituir el mensaje del último commit por el que nosotros introducimos.
+
+```
+git commit --amend -m "corrijo el mensaje de actualizado README.md"
+```
+
+## Reset --soft modificando un commit
+
+Queremos modificar el archivo README pero esas modificaciones deben estar asociadas a ese commit para ello usamos reset -–soft HEAD^ le coloco el ^ porque quiero volver al commit justo anterior a donde apunta HEAD, que es el último.
+
+```
+git reset --soft HEAD^
+```
+
+![not found](img/img-17.png)
 
 Vemos como el README está a la vez en el stage y modificado eso es porque hemos movido el HEAD
 
@@ -796,7 +963,9 @@ How to initialize a Git repo:
 
 Everything starts from here. The first step is to initialize a new Git repo locally in your project root. You can do so with the command below:
 
+```
 git init
+```
 
 ## git add
 
@@ -1298,20 +1467,6 @@ But this isn't something that you want to do with public repos.
 
 git push -f
 ```
-
-# Flags en GIT status
-
-## C: copy of a file into a new one
-
-## D: deletion of a file
-
-## M: modification of the contents or mode of a file
-
-## R: renaming of a file
-
-## T: change in the type of the file
-
-## X: "unknown" change type (most probably a bug, please report it)
 
 # Tema 5 Undoing mistakes
 
