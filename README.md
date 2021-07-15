@@ -12,6 +12,13 @@
   - [Reset, sacando del stage](#reset-sacando-del-stage)
   - [Modificar mensaje del commit (--amend)](#modificar-mensaje-del-commit---amend)
   - [Reset --soft modificando un commit](#reset---soft-modificando-un-commit)
+  - [Reset - -mixed - -hard - - reflog](#reset----mixed----hard-----reflog)
+  - [Renombrar y eliminar archivos con GIT](#renombrar-y-eliminar-archivos-con-git)
+    - [Con terminal](#con-terminal)
+    - [Con sistema de archivos](#con-sistema-de-archivos)
+- [TEMA 3 - RAMAS CONFLICTOS Y TAGS](#tema-3---ramas-conflictos-y-tags)
+  - [Definición](#definición)
+    - [Fast-forwars](#fast-forwars)
 - [Comandos útiles](#comandos-útiles)
   - [config -l](#config--l)
   - [config --global](#config---global)
@@ -296,6 +303,12 @@ El resto de flags de git status son:
 
 6. X: "unknown" change type (most probably a bug, please report it)
 
+7. ??: significa que es un archivo sin seguimiento, para remediarlo hay que hacer un add
+
+8. UU: updated/unmerge
+
+9. MM: se da cuando hacemos un reset y modificamos un archivo aparece como modificado y como pendiente de añadir al stage
+
 ## Creando alias
 
 Generar alias de forma global
@@ -320,6 +333,21 @@ Para ver todas las configuraciones que vamos haciendo a nivel global hacemos un
 > USAMOS: GIT DIFF –STAGED CHECKOUT – COMMIT -AM COMMIT –AMEND RESET --SOFT
 
 Para saber que modificaciones hicimos en un archivo hacemos un diff, nos da las modificaciones entre el último commit y el momento actual.
+
+Si quiero que sea vscode el que muestre las diferencias puedo incluir el siguiente código en el archivo .gitconfig en mi carpeta personal
+
+```bash
+[diff]
+    tool = vscode
+[difftool "vscode"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+```
+
+y por terminal para que me muestre el diff con vscode hago
+
+```javascript
+git difftool origin/master
+```
 
 ```
 git diff
@@ -379,7 +407,11 @@ git commit --amend -m "corrijo el mensaje de actualizado README.md"
 
 ## Reset --soft modificando un commit
 
-Queremos modificar el archivo README pero esas modificaciones deben estar asociadas a ese commit para ello usamos reset -–soft HEAD^ le coloco el ^ porque quiero volver al commit justo anterior a donde apunta HEAD, que es el último.
+Partimo de la siguiente situación, útimo commit `a39895e`:
+
+![not found](img/img-18.png)
+
+Queremos modificar el archivo README pero esas modificaciones deben estar asociadas a ese commit para ello usamos reset -–soft HEAD^ le coloco el ^ porque quiero volver al commit justo anterior (`0c88a07`) a donde apunta HEAD, que es el último.
 
 ```
 git reset --soft HEAD^
@@ -387,31 +419,66 @@ git reset --soft HEAD^
 
 ![not found](img/img-17.png)
 
-Vemos como el README está a la vez en el stage y modificado eso es porque hemos movido el HEAD
+Vemos como el README está a la vez en el stage y modificado eso es porque hemos movido el HEAD, ahora HEAD apunta al comit anterior (`0c88a07`)
 
-Pero seguimos teniendo el commit
-pero HEAD apunta al commit de abajo. Entonces modificamos el archivo y volvemos a hacer un commit lo que llevará los cambios al commit de arriba con las nuevas modificaciones incluidas pero el commit a39895e queda colgado, sin continuidad en nuestra línea y se genera un nuevo commit.
+![not found](img/img-19.png)
 
-Así si hacemos un log queda así
+Pero seguimos teniendo el commit `a39895e` pero HEAD apunta al commit (`0c88a07`). Entonces modificamos el archivo y volvemos a hacer un commit lo que llevará los cambios al commit de arriba con las nuevas modificaciones incluidas pero el commit `a39895e` queda colgado, sin continuidad en nuestra línea y se genera un nuevo commit.
 
-En lugar de usar HEAD^ podemos añadir el id del commit al cual queremos volver
+Así si hacemos un log queda así:
+
+![not found](img/img-20.png)
+
+visualmente sería así
+
+![not found](img/img-21.png)
+
+En lugar de usar HEAD^ podemos añadir el id del commit al cual queremos volver.
+
 Yo tengo este log:
-y quiero modificar el commit donde agrego linterna verde entonces voy al commir anterior el ee26bec
+
+![not found](img/img-22.png)
+
+y quiero modificar el commit donde agrego linterna verde entonces voy al commir anterior el `ee26bec`
+
+```javascript
+git reset --soft ee26bec
+```
 
 Ahora vemos como el HEAD apunta a este commit
 
+![not found](img/img-23.png)
+
 Una vez aquí hago las modificaciones en el archivo del commit (heroes).
+
+![not found](img/img-24.png)
 
 Si miramos la forma extendida se entiende mejor
 
-Tenemos que hay archivos incluidos en el commit pero como hemos vuelto a ese commit y hecho nuevas modificaciones nos lo pone también como pendiente de agregar al commit por eso aparece la doble MM
+![not found](img/img-25.png)
+
+Tenemos que hay archivos incluidos en el commit pero como hemos vuelto a ese commit y hecho nuevas modificaciones nos lo pone también como pendiente de agregar al commit por eso aparece la doble **MM**
+
 Agregamos los cambios al stage
+
+```javascript
+git add -A
+```
+
+![not found](img/img-26.png)
 
 Y hacemos el commit
 
+```javascript
+git commit -m "agregamos a linterna verde y a otro heroe"
+```
+
 Ahora si hacemos un log vemos el camino
 
-USAMOS: MERGE
+![not found](img/img-27.png)
+
+> USAMOS: MERGE
+
 Ahora vemos como el origin con sus commits que quiero mantener están en otra línea que el local por lo que hay que mergearlos para incluir todos esos cambios con la nueva línea local.
 Antes de nada guardo todos los archivos abiertos como por ejemplo el word con la teoría por eso me obliga a hacer añadirlo al stage
 
@@ -419,34 +486,69 @@ Lo que hago es mirar el status veo que efectivamente teoria esta fuera del stage
 
 Ahora en local no tengo archivos con cambios y puedo proceder al merge
 
-Obviamente cuando intento el merge me dice que hay conflictos por que los archivos modificados en local no concuerdan con los de origin(los de gitHub) estos archivos son el de heroes.md y el word de teoria, si hago un status veo como estan marcados con el flag UU que significa updated/unmerged.
+Obviamente cuando intento el merge me dice que hay conflictos por que los archivos modificados en local no concuerdan con los de origin(los de gitHub) estos archivos son el de heroes.md y el word de teoria, si hago un status veo como estan marcados con el flag **UU** que significa updated/unmerged.
+
+![not found](img/img-28.png)
 
 Pero que pasa que el .md el vsCode me muestra las opciones que tengo de manera grafica y me compara ambos archivos así yo puedo elegir con que cambios me quedo así que resulelvo ese comflicto y lo mergea. Así que decido no hacer nada con el word y añado ambos archivos directamente al stage
 
 Aquí ya me dice que master (local) está adelantada 2 commits y origin/master (la de gitHub) atrasada 4. Así como me decía anteriormente q después de solventar los errores hiciese un commit y aunque solo he solventado el de heroes.md hago el commit a ver que pasa Y PARECE QUE FUNCIONA.
 
+![not found](img/img-29.png)
+
 Ha incluido en la misma línea de tiempo los commits del local con los de origin y al hacer el último commit parece que todo acabe allí pero me head local apunta al último commit, lo que es correcto, pero origin está por detrás por lo que tengo q hacer un push para igualarlos.
+
+![not found](img/img-30.png)
 
 Ahora ya tengo HEAD/master y origin apuntando al mismo commit.
 
-Reset - -mixed - -hard - - reflog
+## Reset - -mixed - -hard - - reflog
 
 Ahora lo tenemos todo bien y actualizado pero imaginemos que todos esos commits no nos sirven ya y queremos volver a un commit anterior para volver a comenzar desde allí para eso usamos reset mixed
 
-Yo tengo esto y quiero volver al punto dnd empieza la bifurcación ee26becpara ello uso un reset - - mixed
+Yo tengo esto
+
+![not found](img/img-30.png)
+
+y quiero volver al punto dnd empieza la bifurcación `ee26bec` para ello uso un reset - - mixed
+
+```javascript
+git reset --mixed ee26bec
+```
+
+![not found](img/img-31.png)
 
 Vemos el head que apunta al commit escogido también aparece los archivos modificados entonces pero en pricipio todos los cambios se mantienen como los teníamos pero lo único es que están fuera del stage. Ahora si realmente queremos eliminar esos cambios y quedarnos en ese commit para trabajar a partir de ahí debemos hacer un reset --hard al mismo commit
 
-En el árbol sigue igual pero si vamos a los archivos implicados como .gitignore heroes.md y el word se han perdido todos los cambios hechos después de ese commit ee26bec.
+```javascript
+git reset --hard ee26bec
+```
+
+![not found](img/img-32.png)
+
+En el árbol sigue igual pero si vamos a los archivos implicados como .gitignore heroes.md y el word se han perdido todos los cambios hechos después de ese commit `ee26bec`.
 
 Sigamos bajando en el árbol y veremos como van desapareciendo los archivos, bajaré hasta donde agregamos las misiones
 
 El HEAD lo tenemos casi al principio del proyecto y nos ha desaparecido casi todo
 
 Solo tenemos esos dos archivos en el proyecto y la teoría también se ha perdido.
-Pero ahora queremos recuperar todo lo borrado pero en el log ya no aparecen (a mi sí pq trabajo con gitHub y como el origin/master está al principio y como no hice push pues lo mantiene) pero para git mantiene todo un registro de los pasos q vams dando así que aunq en local haya perdido todos los commits y los archivos con la instrucción reflog veoo todo los cambios efectuados en el árbol del tiempo y puedo volver a cualquier punto siempre que quiera
 
-Me indica que mi HEAD está apuntando a ese commit y para abajo todos los cambios que he ido haciendo. Lo que yo quiero es mover a donde apunta origin y revertir todos los cambios hechos desde entonces. Ahora lo tengo así, sin teoría y solo dos archivos en mi proyecto, voy a hacer reset --hard al commit deseado
+Pero ahora queremos recuperar todo lo borrado pero en el log ya no aparecen (a mi sí pq trabajo con gitHub y como el origin/master está al principio y como no hice push pues lo mantiene).
+
+GIT mantiene todo un registro de los pasos q vams dando así que aunq en local haya perdido todos los commits y los archivos con la instrucción `reflog` veo todo los cambios efectuados en el árbol del tiempo y puedo volver a cualquier punto siempre que quiera
+
+```javascript
+git reflog
+```
+
+![not found](img/img-33.png)
+
+Me indica que mi HEAD está apuntando a ese commit y para abajo todos los cambios que he ido haciendo. Lo que yo quiero es mover a donde apunta origin y revertir todos los cambios hechos desde entonces. Ahora lo tengo así, sin teoría y solo dos archivos en mi proyecto, voy a hacer reset --hard al commit deseado `f32ff99`
+
+```javascript
+git reset --hard f32ff99
+```
 
 Hacemos el reset
 
@@ -454,11 +556,14 @@ Y vemos como todo vuelve a como estaba
 
 Recupero los archivos del proyecto y la teoria.
 
-Renombrar y eliminar archivos con GIT
+## Renombrar y eliminar archivos con GIT
 
-Con terminal
-USAMOS: MV RM
-Si usamos la terminal para renombrar conservaremos toda la hstoria de ese archivo, no será considerado un archivo nuevo.
+### Con terminal
+
+> USAMOS: MV RM
+
+Si usamos la terminal para renombrar conservaremos toda la historia de ese archivo, no será considerado un archivo nuevo.
+
 En mi caso tengo un directorio, Pruebas que quiero renombrar a T1_GIT_Basico utilizo el comando mv de esta manera (git mv nombre_archivo_antiguo nuevo_nombre):
 
 Vemos como todo el contenido del directorio se va renombrando con la nueva ruta
@@ -468,19 +573,36 @@ Vemos como no queda nada en el satge y se ha confirmado el cambio.
 Si queremos eliminar el archivo usamos rm y lo mismo se nos quedará el cambio en el stage y luego confirmamos con un commit
 
 D de delete.
-Si borramos un directorio con contenido tenemos q añadir el flag -r recursivo
-Con sistema de archivos
+Si borramos un directorio con contenido tenemos q añadir el flag `-r` recursivo
+
+### Con sistema de archivos
+
 Si usamos el sistema de archivos para hacer cambios en nuestros proyecto debemos proceder de la siguiente manera para que git entienda los cambios.
 
 1. Hacemos la modificación (cambiar el nombre de un fichero)
 
+![not found](img/img-34.png)
+
 Git interpreta que hemos eliminad un arcivo y hemos creado otro nuevo, así que debemos registrar el cambio como un update.
-?? significa que es un archivo sin seguimiento, para remediarlo hay que hacer un add
-D delete, archivo eliminado
-M modified, archivo modificado 2. Hacemos un update git add -u
+
+**??** significa que es un archivo sin seguimiento, para remediarlo hay que hacer un add
+
+**D** delete, archivo eliminado
+**M** modified, archivo modificado
+
+2. Hacemos un update
+
+```javascript
+git add -u
+```
+
 Este comando nos permite añadir al stage solo aquellos archivos modificados/eliminados sin añadir los que no estan en seguimiento.
 
+![not found](img/img-35.png)
+
 Hemos subido al stage el delete pero no ha añadido el nuevo. Para que lo reconozca como un renombramiento hacemos un -A
+
+![not found](img/img-36.png)
 
 Para confirmar el cambio hacemos el commit
 Si eliminamos el archivo es lo mismo primero un add -u y después un commit
@@ -489,9 +611,10 @@ Ignorar archivos en git - .gitignore
 Este archivo debe ir en la raíz del proyecto.
 En cada línea de este archivo debe tener una expresión para gnorar ciertos archivos.
 
-TEMA 3 - RAMAS CONFLICTOS Y TAGS
+# TEMA 3 - RAMAS CONFLICTOS Y TAGS
 
-Definición
+## Definición
+
 Una rama no es más que una línea del tiempo alterativa a la línea principal (master). En esa rama podemos hacer nestras modificaciones añadir funcionalidades al proyecto sin alterar el proyecto principal, si posteriormente se aceptan los cambios y todo funciona bien se puede agregar al proyecto principal, rama master, lo que llamamos merge.
 Hay tres tipos de merge:
 
@@ -499,9 +622,9 @@ Hay tres tipos de merge:
 2. Merge automático => es cuando sí ha habido cambios en la rama principal (master) pero no en archivos comunes entre la rama secundaria y master así que git vuelve a incorporar los cambios sin ningún problema.
 3. Merge manual=> en este caso git solicita una solución manual ya que que la rama secundaria ha modificado archivos que también se encuentran en la principal. Así una vez resulete el cnflicto se debe realizar un merge commit.
 
-Fast-forwars ejemplo
+### Fast-forwars
 
-USAMOS: BRANCH DIFF -D
+> USAMOS: BRANCH DIFF -D
 
 1. En nuestro proyecto Demo-06 creamos un archivo, villanos, pero no estamos seguros si incluirlo en master así que creamos una rama llamada villanos.
 
