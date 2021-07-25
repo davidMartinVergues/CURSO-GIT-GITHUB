@@ -1,3 +1,9 @@
+- [Curso GIT y GITHUB Platzi](#curso-git-y-github-platzi)
+  - [Flujo básico de trabajo con GIT](#flujo-básico-de-trabajo-con-git)
+- [RAMAS CONFLICTOS](#ramas-conflictos)
+  - [Definición](#definición)
+  - [ejemplo práctico](#ejemplo-práctico)
+  - [git reset y git rm](#git-reset-y-git-rm)
 - [Curso de Git y GitHub](#curso-de-git-y-github)
 - [TEMA 1](#tema-1)
   - [¿Cómo funciona GIT?](#cómo-funciona-git)
@@ -16,8 +22,9 @@
   - [Renombrar y eliminar archivos con GIT](#renombrar-y-eliminar-archivos-con-git)
     - [Con terminal](#con-terminal)
     - [Con sistema de archivos](#con-sistema-de-archivos)
+  - [Flujo básico de trabajo con GIT](#flujo-básico-de-trabajo-con-git-1)
 - [TEMA 3 - RAMAS CONFLICTOS Y TAGS](#tema-3---ramas-conflictos-y-tags)
-  - [Definición](#definición)
+  - [Definición](#definición-1)
     - [Fast-forwars](#fast-forwars)
 - [Comandos útiles](#comandos-útiles)
   - [config -l](#config--l)
@@ -63,6 +70,46 @@
   - [git push -f](#git-push--f)
 - [Tema 5 Undoing mistakes](#tema-5-undoing-mistakes)
 
+# Curso GIT y GITHUB Platzi
+
+## Flujo básico de trabajo con GIT
+
+![not found](img/img-38.png)
+
+Cuando hacemos `git init` en el directorio raíz de nuestro proyecto pasan dos cosas:
+
+1. se crea un espacio en memoria RAM llamado `staging`, donde se irán agregando los cambios es decir cuando hacemos un `git add .`
+2. Se crea un repositorio, es la carpeta `.git` del proyecto, es donde se guardan los cambios definitivos del proyecto los `commits`. El nombre por defecto del repositorio es `master`. Cuando se hace el commit se le da un identificador.
+
+Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y como lo teníamos en el repositorio master, es decir en el último commit hacemos un `git checkout`.
+
+# RAMAS CONFLICTOS
+
+## Definición
+
+Una rama no es más que una línea del tiempo alterativa a la línea principal (master). En esa rama podemos hacer nestras modificaciones añadir funcionalidades al proyecto sin alterar el proyecto principal, si posteriormente se aceptan los cambios y todo funciona bien se puede agregar al proyecto principal, rama master, lo que llamamos merge.
+Hay tres tipos de merge:
+
+1. Fast-forward => éste se da cuando en la rama master no ha habido ningún cambio desde que se separó la rama secundaria así que simplemente GIT incorpora los cambios a la principal cerrando la secundaria.
+2. Merge automático => es cuando sí ha habido cambios en la rama principal (master) pero no en archivos comunes entre la rama secundaria y master así que git vuelve a incorporar los cambios sin ningún problema.
+3. Merge manual=> en este caso git solicita una solución manual ya que que la rama secundaria ha modificado archivos que también se encuentran en la principal. Así una vez resulete el cnflicto se debe realizar un merge commit.
+
+A estas ramas se les da un nombre para identificarlas por ejemplo rama 'uix del carrito'. Cuando en la rama master se encuentra un bug se suele crear una rama para solucionar ese fallo, normalmente a esa rama se le llama `hotfix` o `bugfixing`. Una vez soolucionado se hace el merge entre master y el hotfix, al finalizar el merge tenemos la última versión de master a esta última versión se le llama `HEAD`.
+
+## ejemplo práctico
+
+Vamos haciendo commits y con `git log` los podemos ver. Ahora bien si nos hemos equivocado podemos volver atrás usando un reset. Hay dos tipos de reset:
+
+1. `git reset --hard`, lo que hace es apuntar el HEAD al commit indicado y se revierten todos los cambios, nos queda el directorio de trabajo como en el commit indicado.
+2. `git reset --soft`, lo que hace es apuntar el HEAD al commit indicado pero el directorio de trabajo sigue igual, entonces cuando volvemos ahacer un commit se crea uno nuevo abandonando los otros  
+   ![not found](img/img-39.png)
+
+con `git log --stat` puedo ver un log y un resumen de los cambios en cada commit.
+
+Para movernos entre commits usamos checkout `git checkout idDelCommit` eso ambia todo el proyecto pero puedo hacer el checkout solo de un archivo `git checkout idDelCommit index.html` El resto del proyecto queda igual pero tenemos la versión anterior del archivo.Si queremos volver a la última versión hacemos un `git checkout master index.html` y nos trae la versión de master.
+
+## git reset y git rm
+
 # Curso de Git y GitHub 
 
 # TEMA 1
@@ -107,6 +154,14 @@ git config --global -e
 ```
 
 ![not found](img/img-3.png)
+
+Para saber donde están todos los archivos de configuración de git
+
+```
+git config --list --show-origin
+```
+
+![not found](img/img-37.png)
 
 El repositorio local esta compuesto por tres "árboles" administrados por git. El primero es el Directorio de trabajo que contiene los archivos, el segundo es el Index(stage) que actua como una zona intermedia, y el último es el HEAD que apunta al último commit realizado.
 ![not found](img/img-5.png)
@@ -178,11 +233,11 @@ Si queremos descartar algún tipo de archivo, para q no sea seguido por git crea
 
 Imaginemos que por error modificamos un archivo o eliminamos su contenido. Con el comando `checkout` recuperamos el proyecto como estaba en el último commit. Esto también sirve para recuperar carpetas borradas
 
-```javascript
+```
 git checkout -- .
 ```
 
-El comando `checkout`nos permite movernos entre ramas, en este caso `checkout -- .` lo que hace es reemplazar todos los cambios hechos en local con el contenido el `HEAD`.
+El comando `checkout`nos permite movernos entre ramas, en este caso `checkout -- .` lo que hace es reemplazar todos los cambios hechos en local con el contenido del `HEAD`.
 
 A medida que vamos haciendo commits se va creando un registro con toda la información. Para acceder a este registro usamos:
 
@@ -259,7 +314,7 @@ git reset *xml
 
 Una vez sabemos cómo añadir archivos al stage/en seguimiento por git también es importante saber cómo hacer q git olvide estos archivos o dejarlos de seguir para ello usamos el comando
 
-```javascript
+```
 git rm --cache nombreArchivo
 
 ```
@@ -272,7 +327,7 @@ Cuando hacemos un log vemos el HEAD que nos indica el último commit de la rama 
 
 Todos estos flags me servirán para ver mejor el log cuando tengamos ramas y merges…
 
-```javascript
+```
 --oneline --decorate --all –-graph
 ```
 
@@ -345,7 +400,7 @@ Si quiero que sea vscode el que muestre las diferencias puedo incluir el siguien
 
 y por terminal para que me muestre el diff con vscode hago
 
-```javascript
+```
 git difftool origin/master
 ```
 
@@ -371,6 +426,20 @@ Para entender el diff (comparación):
 
 En verde o con el + / b es como está el archivo de la rama donde nos encontramos, es decir con los cambios  
 En rojo o con el - / a es como estaba el archivo en el último commit
+
+Podemos usar el diff para saber las diferencias entre dos versiones del archivo usando los identificadores de los commits
+
+```
+git diff 440da1c 07379ed
+```
+
+el primer identificador sería como la versión original y el último la más reciente
+
+si queremos ver esos cambios en el entorno de vscode
+
+```
+git difftool 440da1c 07379ed
+```
 
 ## Reset, sacando del stage
 
@@ -441,7 +510,7 @@ Yo tengo este log:
 
 y quiero modificar el commit donde agrego linterna verde entonces voy al commir anterior el `ee26bec`
 
-```javascript
+```
 git reset --soft ee26bec
 ```
 
@@ -461,7 +530,7 @@ Tenemos que hay archivos incluidos en el commit pero como hemos vuelto a ese com
 
 Agregamos los cambios al stage
 
-```javascript
+```
 git add -A
 ```
 
@@ -469,7 +538,7 @@ git add -A
 
 Y hacemos el commit
 
-```javascript
+```
 git commit -m "agregamos a linterna verde y a otro heroe"
 ```
 
@@ -512,7 +581,7 @@ Yo tengo esto
 
 y quiero volver al punto dnd empieza la bifurcación `ee26bec` para ello uso un reset - - mixed
 
-```javascript
+```
 git reset --mixed ee26bec
 ```
 
@@ -520,7 +589,7 @@ git reset --mixed ee26bec
 
 Vemos el head que apunta al commit escogido también aparece los archivos modificados entonces pero en pricipio todos los cambios se mantienen como los teníamos pero lo único es que están fuera del stage. Ahora si realmente queremos eliminar esos cambios y quedarnos en ese commit para trabajar a partir de ahí debemos hacer un reset --hard al mismo commit
 
-```javascript
+```
 git reset --hard ee26bec
 ```
 
@@ -538,7 +607,7 @@ Pero ahora queremos recuperar todo lo borrado pero en el log ya no aparecen (a m
 
 GIT mantiene todo un registro de los pasos q vams dando así que aunq en local haya perdido todos los commits y los archivos con la instrucción `reflog` veo todo los cambios efectuados en el árbol del tiempo y puedo volver a cualquier punto siempre que quiera
 
-```javascript
+```
 git reflog
 ```
 
@@ -546,7 +615,7 @@ git reflog
 
 Me indica que mi HEAD está apuntando a ese commit y para abajo todos los cambios que he ido haciendo. Lo que yo quiero es mover a donde apunta origin y revertir todos los cambios hechos desde entonces. Ahora lo tengo así, sin teoría y solo dos archivos en mi proyecto, voy a hacer reset --hard al commit deseado `f32ff99`
 
-```javascript
+```
 git reset --hard f32ff99
 ```
 
@@ -592,7 +661,7 @@ Git interpreta que hemos eliminad un arcivo y hemos creado otro nuevo, así que 
 
 2. Hacemos un update
 
-```javascript
+```
 git add -u
 ```
 
@@ -611,6 +680,17 @@ Ignorar archivos en git - .gitignore
 Este archivo debe ir en la raíz del proyecto.
 En cada línea de este archivo debe tener una expresión para gnorar ciertos archivos.
 
+## Flujo básico de trabajo con GIT
+
+![not found](img/img-38.png)
+
+Cuando hacemos `git init` en el directorio raíz de nuestro proyecto pasan dos cosas:
+
+1. se crea un espacio en memoria RAM llamado `staging`, donde se irán agregando los cambios es decir cuando hacemos un `git add .`
+2. Se crea un repositorio, es la carpeta `.git` del proyecto, es donde se guardan los cambios definitivos del proyecto los `commits`. El nombre por defecto del repositorio es `master`. Cuando se hace el commit se le da un identificador.
+
+Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y como lo teníamos en el repositorio master, es decir en el último commit hacemos un `git checkout`.
+
 # TEMA 3 - RAMAS CONFLICTOS Y TAGS
 
 ## Definición
@@ -621,6 +701,8 @@ Hay tres tipos de merge:
 1. Fast-forward => éste se da cuando en la rama master no ha habido ningún cambio desde que se separó la rama secundaria así que simplemente GIT incorpora los cambios a la principal cerrando la secundaria.
 2. Merge automático => es cuando sí ha habido cambios en la rama principal (master) pero no en archivos comunes entre la rama secundaria y master así que git vuelve a incorporar los cambios sin ningún problema.
 3. Merge manual=> en este caso git solicita una solución manual ya que que la rama secundaria ha modificado archivos que también se encuentran en la principal. Así una vez resulete el cnflicto se debe realizar un merge commit.
+
+A estas ramas se les da un nombre para identificarlas por ejemplo rama 'uix del carrito'. Cuando en la rama master se encuentra un bug se suele crear una rama para solucionar ese fallo, normalmente a esa rama se le llama `hotfix` o `bugfixing`. Una vez soolucionado se hace el merge entre master y el hotfix, al finalizar el merge tenemos la última versión de master a esta última versión se le llama `HEAD`
 
 ### Fast-forwars
 
@@ -1059,14 +1141,14 @@ git config -l
 
 With the command below you can configure your user name:
 
-```javascript
+```
 git config --global user.name "Fabio"
 ```
 
 2. How to setup your Git user email:
    This command lets you setup the user email address you'll use in your commits.
 
-```javascript
+```
 git config --global user.email "signups@fabiopacifici.com"
 
 ```
@@ -1075,7 +1157,7 @@ git config --global user.email "signups@fabiopacifici.com"
 
 You can store login credentials in the cache so you don't have to type them in each time. Just use this command:
 
-```javascript
+```
 git config --global credential.helper cache
 
 ```
@@ -1096,7 +1178,7 @@ git init
 
 The command below will add a file to the staging area. Just replace filename_here with the name of the file you want to add to the staging area.
 
-```javascript
+```
 git add filename_here
 
 ```
@@ -1105,7 +1187,7 @@ git add filename_here
 
 If you want to add all files in your project to the staging area, you can use a wildcard . and every file will be added for you.
 
-```javascript
+```
 git add .
 
 ```
@@ -1114,7 +1196,7 @@ git add .
 
 With the asterisk in the command below, you can add all files starting with 'fil' in the staging area.
 
-```javascript
+```
 
 git add fil\*
 ```
@@ -1125,7 +1207,7 @@ How to check a repository's status in Git:
 
 This command will show the status of the current repository including staged, unstaged, and untracked files.
 
-```javascript
+```
 git status
 
 ```
@@ -1138,7 +1220,7 @@ This command will open a text editor in the terminal where you can write a full 
 
 A commit message is made up of a short summary of changes, an empty line, and a full description of the changes after it.
 
-```javascript
+```
 git commit
 
 ```
@@ -1147,7 +1229,7 @@ git commit
 
 You can add a commit message without opening the editor. This command lets you only specify a short summary for your commit message.
 
-```javascript
+```
 git commit -m "your commit message here"
 
 ```
@@ -1156,7 +1238,7 @@ git commit -m "your commit message here"
 
 You can add and commit tracked files with a single command by using the -a and -m options.
 
-```javascript
+```
 git commit -a -m"your commit message here"
 
 ```
@@ -1167,7 +1249,7 @@ git commit -a -m"your commit message here"
 
 This command shows the commit history for the current repository:
 
-```javascript
+```
 git log
 
 ```
@@ -1176,7 +1258,7 @@ git log
 
 This command shows the commit's history including all files and their changes:
 
-```javascript
+```
 git log -p
 
 ```
@@ -1189,7 +1271,7 @@ This command shows a specific commit.
 
 Replace commit-id with the id of the commit that you find in the commit log after the word commit.
 
-```javascript
+```
 git show commit-id
 
 ```
@@ -1200,7 +1282,7 @@ How to see log stats in Git:
 
 This command will cause the Git log to show some statistics about the changes in each commit, including line(s) changed and file names.
 
-```javascript
+```
 git log --stat
 
 ```
@@ -1214,7 +1296,7 @@ git diff shows only unstaged changes by default.
 
 We can call diff with the --staged flag to see any staged changes.
 
-```javascript
+```
 
 git diff
 git diff all_checks.py
@@ -1227,7 +1309,7 @@ How to see changes using "git add -p":
 
 This command opens a prompt and asks if you want to stage changes or not, and includes other options.
 
-```javascript
+```
 git add -p
 
 ```
@@ -1238,7 +1320,7 @@ How to remove tracked files from the current working tree in Git:
 
 This command expects a commit message to explain why the file was deleted.
 
-```javascript
+```
 git rm filename
 
 ```
@@ -1249,7 +1331,7 @@ How to rename files in Git:
 
 This command stages the changes, then it expects a commit message.
 
-```javascript
+```
 git mv oldfile newfile
 
 ```
@@ -1264,7 +1346,7 @@ Create a .gitignore file and commit it.
 
 How to revert unstaged changes in Git:
 
-```javascript
+```
 git checkout filename
 
 ```
@@ -1275,7 +1357,7 @@ How to revert staged changes in Git:
 
 You can use the -p option flag to specify the changes you want to reset.
 
-```javascript
+```
 git reset HEAD filename
 git reset HEAD -p
 
@@ -1287,7 +1369,7 @@ How to amend(enmendar) the most recent commit in Git:
 
 git commit --amend allows you to modify and add changes to the most recent commit.
 
-```javascript
+```
 git commit --amend
 ```
 
@@ -1300,7 +1382,7 @@ How to rollback the last commit in Git
 git revert will create a new commit that is the opposite of everything in the given commit.
 We can revert the latest commit by using the head alias like this:
 
-```javascript
+```
 git revert HEAD
 
 ```
@@ -1309,7 +1391,7 @@ How to rollback an old commit in Git:
 
 You can revert an old commit using its commit id. This opens the editor so you can add a commit message.
 
-```javascript
+```
 git revert comit_id_here
 
 ```
@@ -1320,7 +1402,7 @@ How to create a new branch in Git
 
 By default, you have one branch, the main branch. With this command, you can create a new branch. Git won't switch to it automatically – you will need to do it manually with the next command.
 
-```javascript
+```
 git branch branch_name
 
 ```
@@ -1331,7 +1413,7 @@ How to switch to a newly created branch in Git
 
 When you want to use a different or a newly created branch you can use this command:
 
-```javascript
+```
 git checkout branch_name
 
 ```
@@ -1342,7 +1424,7 @@ How to list branches in Git:
 
 You can view all created branches using the git branch command. It will show a list of all branches and mark the current branch with an asterisk and highlight it in green.
 
-```javascript
+```
 
 git branch
 ```
@@ -1353,7 +1435,7 @@ How to create a branch in Git and switch to it immediately:
 
 In a single command, you can create and switch to a new branch right away.
 
-```javascript
+```
 git checkout -b branch_name
 
 ```
@@ -1364,7 +1446,7 @@ How to delete a branch in Git:
 
 When you are done working with a branch and have merged it, you can delete it using the command below:
 
-```javascript
+```
 
 git branch -d branch_name
 ```
@@ -1375,7 +1457,7 @@ How to merge two branches in Git:
 
 To merge the history of the branch you are currently in with the branch_name, you will need to use the command below:
 
-```javascript
+```
 
 git merge branch_name
 ```
@@ -1387,7 +1469,7 @@ How to show the commit log as a graph in Git:
 We can use --graph to get the commit log to show as a graph. Also,
 --oneline will limit commit messages to a single line.
 
-```javascript
+```
 
 git log --graph --oneline
 ```
@@ -1398,7 +1480,7 @@ How to show the commit log as a graph of all branches in Git:
 
 Does the same as the command above, but for all branches.
 
-```javascript
+```
 
 git log --graph --online --all
 ```
@@ -1409,7 +1491,7 @@ How to abort a conflicting merge in Git:
 
 If you want to throw a merge away and start over, you can run the following command:
 
-```javascript
+```
 
 git merge --abort
 ```
@@ -1420,7 +1502,7 @@ How to add a remote repository in Git
 
 This command adds a remote repository to your local repository (just replace https://repo_here with your remote repo URL).
 
-```javascript
+```
 
 git add remote https://repo_here
 ```
@@ -1431,7 +1513,7 @@ How to see remote URLs in Git:
 
 You can see all remote repositories for your local repository with this command:
 
-```javascript
+```
 
 git remote -v
 ```
@@ -1443,7 +1525,7 @@ How to get more info about a remote repo in Git:
 Just replace origin with the name of the remote obtained by
 running the git remote -v command.
 
-```javascript
+```
 
 git remote show origin
 ```
@@ -1454,7 +1536,7 @@ How to push changes to a remote repo in Git:
 
 When all your work is ready to be saved on a remote repository, you can push all changes using the command below:
 
-```javascript
+```
 
 git push
 ```
@@ -1465,7 +1547,7 @@ How to pull changes from a remote repo in Git:
 
 If other team members are working on your repository, you can retrieve the latest changes made to the remote repository with the command below:
 
-```javascript
+```
 git pull
 
 ```
@@ -1476,7 +1558,7 @@ How to check remote branches that Git is tracking:
 
 This command shows the name of all remote branches that Git is tracking for the current repository:
 
-```javascript
+```
 git branch -r
 ```
 
@@ -1486,7 +1568,7 @@ How to fetch remote repo changes in Git:
 
 This command will download the changes from a remote repo but will not perform a merge on your local branch (as git pull does that instead).
 
-```javascript
+```
 
 git fetch
 ```
@@ -1499,7 +1581,7 @@ How to check the current commits log of a remote repo in Git
 
 Commit after commit, Git builds up a log. You can find out the remote repository log by using this command:
 
-```javascript
+```
 git log origin/master
 
 ```
@@ -1510,7 +1592,7 @@ How to merge a remote repo with your local repo in Git:
 
 If the remote repository has changes you want to merge with your local, then this command will do that for you:
 
-```javascript
+```
 git merge origin/main
 
 ```
@@ -1522,7 +1604,7 @@ How to get the contents of remote branches in Git without automatically merging:
 This lets you update the remote without merging any content into the
 local branches. You can call git merge or git checkout to do the merge.
 
-```javascript
+```
 git remote update
 
 ```
@@ -1533,7 +1615,7 @@ How to push a new branch to a remote repo in Git:
 
 If you want to push a branch to a remote repository you can use the command below. Just remember to add -u to create the branch upstream:
 
-```javascript
+```
 
 git push -u origin branch_name
 ```
@@ -1544,7 +1626,7 @@ How to remove a remote branch in Git:
 
 If you no longer need a remote branch you can remove it using the command below:
 
-```javascript
+```
 
 git push --delete origin branch_name_here
 ```
@@ -1555,7 +1637,7 @@ How to use Git rebase:
 
 You can transfer completed work from one branch to another using git rebase.
 
-```javascript
+```git
 git rebase branch_name_here
 
 ```
@@ -1566,7 +1648,7 @@ How to run rebase interactively in Git:
 You can run git rebase interactively using the -i flag.
 It will open the editor and present a set of commands you can use.
 
-```javascript
+```git
 git rebase -i master
 
 ```
@@ -1586,7 +1668,7 @@ How to force a push request in Git:
 This command will force a push request. This is usually fine for pull request branches because nobody else should have cloned them.
 But this isn't something that you want to do with public repos.
 
-```javascript
+```
 
 git push -f
 ```
