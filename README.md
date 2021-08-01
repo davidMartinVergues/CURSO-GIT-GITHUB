@@ -4,6 +4,13 @@
   - [Definición](#definición)
   - [ejemplo práctico](#ejemplo-práctico)
   - [git reset y git rm](#git-reset-y-git-rm)
+    - [git rm](#git-rm)
+    - [git reset](#git-reset)
+  - [Creación de ramas](#creación-de-ramas)
+- [Github](#github)
+  - [Llaves públicas y llaes privadas](#llaves-públicas-y-llaes-privadas)
+    - [Generando mis llaves public/private](#generando-mis-llaves-publicprivate)
+    - [crear conexión ssh con github](#crear-conexión-ssh-con-github)
 - [Curso de Git y GitHub](#curso-de-git-y-github)
 - [TEMA 1](#tema-1)
   - [¿Cómo funciona GIT?](#cómo-funciona-git)
@@ -38,11 +45,11 @@
   - [git log](#git-log-1)
   - [git diff](#git-diff)
   - [git add -p](#git-add--p)
-  - [git rm](#git-rm)
+  - [git rm](#git-rm-1)
   - [git mv](#git-mv)
   - [.gitignore](#gitignore)
   - [git checkout](#git-checkout)
-  - [git reset](#git-reset)
+  - [git reset](#git-reset-1)
   - [git commit --amend](#git-commit---amend)
   - [git revert](#git-revert)
   - [git branch](#git-branch)
@@ -70,6 +77,8 @@
   - [git push -f](#git-push--f)
 - [Tema 5 Undoing mistakes](#tema-5-undoing-mistakes)
 
+---
+
 # Curso GIT y GITHUB Platzi
 
 ## Flujo básico de trabajo con GIT
@@ -79,19 +88,23 @@
 Cuando hacemos `git init` en el directorio raíz de nuestro proyecto pasan dos cosas:
 
 1. se crea un espacio en memoria RAM llamado `staging`, donde se irán agregando los cambios es decir cuando hacemos un `git add .`
-2. Se crea un repositorio, es la carpeta `.git` del proyecto, es donde se guardan los cambios definitivos del proyecto los `commits`. El nombre por defecto del repositorio es `master`. Cuando se hace el commit se le da un identificador.
+2. Se crea un repositorio, es la carpeta `.git` del proyecto, es donde se guardan los cambios definitivos del proyecto los `commits`. El nombre por defecto de la rama principal del repo es `master`. Cuando se hace el commit se le da un identificador.
 
-Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y como lo teníamos en el repositorio master, es decir en el último commit hacemos un `git checkout`.
+Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y como lo teníamos en la rama master, es decir en el último commit hacemos un `git checkout`.
+
+La rama principal del repo se llama `master` es donde tenemos la sucesión de todos los commits. Existe un puntero `HEAD` que apunta al commit dnd nos encontramos actualmente, normalmente el último. Ese HEAD se puede mover haciendo un `checkout`
 
 # RAMAS CONFLICTOS
 
 ## Definición
 
-Una rama no es más que una línea del tiempo alterativa a la línea principal (master). En esa rama podemos hacer nestras modificaciones añadir funcionalidades al proyecto sin alterar el proyecto principal, si posteriormente se aceptan los cambios y todo funciona bien se puede agregar al proyecto principal, rama master, lo que llamamos merge.
+Una rama no es más que una línea del tiempo alterativa a la línea principal (master). En esa rama podemos hacer nuestras modificaciones añadir funcionalidades al proyecto sin alterar el proyecto principal, si posteriormente se aceptan los cambios y todo funciona bien se puede agregar al proyecto principal, rama master, lo que llamamos merge.
 Hay tres tipos de merge:
 
 1. Fast-forward => éste se da cuando en la rama master no ha habido ningún cambio desde que se separó la rama secundaria así que simplemente GIT incorpora los cambios a la principal cerrando la secundaria.
+   
 2. Merge automático => es cuando sí ha habido cambios en la rama principal (master) pero no en archivos comunes entre la rama secundaria y master así que git vuelve a incorporar los cambios sin ningún problema.
+   
 3. Merge manual=> en este caso git solicita una solución manual ya que que la rama secundaria ha modificado archivos que también se encuentran en la principal. Así una vez resulete el cnflicto se debe realizar un merge commit.
 
 A estas ramas se les da un nombre para identificarlas por ejemplo rama 'uix del carrito'. Cuando en la rama master se encuentra un bug se suele crear una rama para solucionar ese fallo, normalmente a esa rama se le llama `hotfix` o `bugfixing`. Una vez soolucionado se hace el merge entre master y el hotfix, al finalizar el merge tenemos la última versión de master a esta última versión se le llama `HEAD`.
@@ -106,9 +119,196 @@ Vamos haciendo commits y con `git log` los podemos ver. Ahora bien si nos hemos 
 
 con `git log --stat` puedo ver un log y un resumen de los cambios en cada commit.
 
-Para movernos entre commits usamos checkout `git checkout idDelCommit` eso ambia todo el proyecto pero puedo hacer el checkout solo de un archivo `git checkout idDelCommit index.html` El resto del proyecto queda igual pero tenemos la versión anterior del archivo.Si queremos volver a la última versión hacemos un `git checkout master index.html` y nos trae la versión de master.
+Para movernos entre commits usamos checkout `git checkout idDelCommit` ceso ambia todo el proyecto pero puedo hacer el checkout solo de un archivo `git checkout idDelCommit index.html` El resto del proyecto queda igual pero tenemos la versión anterior del archivo.Si queremos volver a la última versión hacemos un `git checkout master index.html` y nos trae la versión de master.
 
 ## git reset y git rm
+
+### git rm
+
+1. `git rm nombreArchivo`
+
+Si usamos `git rm nombreArchivo`eliminamos el archivo del directorio de trabajo y del stage(index), después de esta acción debemos hacer un commit explicando el motivo. Si el archivo ha sido modificado y esos cambios no han sido comiteados git no dejará borrarlo
+
+2. `git rm --cached nombreArchivo`
+   Si queremos quitar del stage un archivo y dejarlo como untrack debemos usar `git rm --cached nombreArchivo` pero esta acción mantiene el archivo en nuestro directorio de trabajo.
+
+3. `git rm --force nombreArchivo`
+
+Hace la misma función que git rm pero sin la comprobación de cambios, es decir aunq el archivo tenga cambios no guardados el archivo se borrará. En ambos casos siempre se puede recuperar con un `git checkout`.
+
+### git reset
+
+Este comando nos ayuda a volver en el tiempo. Pero no como git checkout que nos deja ir, mirar, pasear y volver. Con git reset volvemos al pasado sin la posibilidad de volver al futuro. Borramos la historia y la debemos sobreescribir. No hay vuelta atrás.
+
+Este comando es muy peligroso y debemos usarlo solo en caso de emergencia. Recuerda que debemos usar alguna de estas dos opciones:
+
+Hay dos formas de usar git reset: con el argumento --hard, borrando toda la información que tengamos en el área de staging (y perdiendo todo para siempre). O, un poco más seguro, con el argumento --soft, que mantiene allí los archivos del área de staging para que podamos aplicar nuestros últimos cambios pero desde un commit anterior.
+
+1. `git reset --soft`: Borramos todo el historial y los registros de Git pero guardamos los cambios que tengamos en Staging, así podemos aplicar las últimas actualizaciones a un nuevo commit.
+
+2. `git reset --hard`: Borra todo. Todo todito, absolutamente todo. Toda la información de los commits y del área de staging se borra del historial.
+
+3. `git reset HEAD`: Este es el comando para sacar archivos del área de Staging. No para borrarlos ni nada de eso, solo para que los últimos cambios de estos archivos no se envíen al último commit, a menos que cambiemos de opinión y los incluyamos de nuevo en staging con git add, por supuesto. La diferencia con `git rm --cached` es que este último deja el archivo untracked y reset HEAD solo saca del stage localmente queda con las nuevas modificaciones pero no incluido en el próximo commit.
+
+Al jugar de esta manera puede que llegue a una situación de HEAD desacoplado i Detached HEAD, es decir master (rama principal) y HEAD están desacoplados. Con el comando `git branch` veo mis ramas y cmprobamos como HEAD sigue por otra rama de master
+
+![not found](img/img-40.png)
+
+![not found](img/img-41.png)
+
+![not found](img/img-42.png)
+
+Si esto lo dejamos así git eliminará esa rama en la que se encuentra HEAD y perderemos los cambios. PAra arreglarlo tenemos que darle nombre a la rama con
+
+```git
+git branch nueva_rama b2e51c9
+
+```
+
+![not found](img/img-43.png)
+
+nos movemos a master y fusionamos ramas.
+
+```git
+git checkout master
+git merge nueva_rama
+```
+
+finalmente borramos la rama creada (nueva_rama)
+
+```
+git branch -d nueva_rama
+```
+
+y tenemos la situación correcta.
+
+![not found](img/img-44.png)
+
+## Creación de ramas
+
+Nos colocamos en nuestro último commit y creamos una nueva rama, esto creará una copia de nuestro proyecto. 
+
+```
+git branch cabecera
+```
+Podemos crear una nueva rama y movernos a ella con 
+```
+git checkout -b nueva_rama
+```
+con esto creo una nueva rama y la situación es la siguiente: tengo el HEAD apuntando al último commit de las ramas master y cabecera y m encuentro en master
+
+![not found](img/img-45.png)
+
+Ahora me muevo a la otra rama 
+
+```
+git checkout cabecera
+```
+
+y hago cambios en los archivos. Al hacer commits de los cambios en la nueva rama, master se queda atrás. Si esos nuevos cambios funcionan bien puedo fusionar master con la rama creada para ello uso un merge desde master. En este caso no habrá problema xq en master no he modificado los archivos en el mismo punto que en la rama nueva así que se relaizará un merge automático .
+
+```
+git checkout master
+git merge cabecera
+```
+Ahora bien si hago cambios en las mismas líneas de los archivos tanto en la nueva rama como en la master esto entra en conflictos y hay que resolverlos.
+Cuando intente hacer el merge vscode me sacará una pantalla con los cambios de la rama donde estoy y los cambios de la rama que quiero fusionar y tengo que decidir con cual m qdo. Una vez modifico lo que necesito hago un nuevo commit
+
+>El merge siempre hay que hacerlo desde master o bien desde la rama que queremos que continue(que quede viva)
+
+
+# Github
+
+Podemos crear un repositorio en github y enlazar ese repo con el nuestro local para ello:
+
+```
+# Primero: Guardar la URL del repositorio de GitHub
+# con el nombre de origin
+git remote add origin URL
+
+# Segundo: Verificar que la URL se haya guardado
+# correctamente:
+git remote
+git remote -v
+
+# Tercero: Traer la versión del repositorio remoto y
+# hacer merge para crear un commit con los archivos
+# de ambas partes. Podemos usar git fetch y git merge
+# o solo el git pull con el flag --allow-unrelated-histories:
+git pull origin master --allow-unrelated-histories
+
+# Por último, ahora sí podemos hacer git push para guardar
+# los cambios de nuestro repositorio local en GitHub:
+git push origin master
+```
+
+## Llaves públicas y llaes privadas
+
+Es un sistema para mantener encriptado el envío de información por internet.
+Yo creo enviar datos a un usuario a través de internet. Creo mediante un algortimo matemático una llave pública y otra privada. Ambas forman parte del sistema de descrifrado. Te envío mi llave pública y el receptor codifica su mensaje con mi llave pública y m lo envía y solo con mi llave privada puedo decodificar ese mensaje. 
+Ahora para realizar lo mismo pero a la inversa y yo crear un mensaje cifrado el receptor tiene que enviarme su llave pública y así se cierra el círculo.
+
+Hasta ahora nos conectábamos con github usando https pero si queremos añadir una capa más de seguridad debemos usar el sistema de llaves públicas/privadas, para ello debemos usar otro protocolo de comunicación `ssh` este tb se usa para comunicarse dos computadoras.
+
+Para poder establecer una comunicación ssh con github tenemos que eviarle nuestra llave pública y github nos devuelve cifrada su llave pública. Este tipo de comunicación se establece por usuario(computadora) no por repo. 
+
+### Generando mis llaves public/private
+
+Esta llave para usarla con github estará enlazada a un email así que
+gnóthi seautón
+```
+ssh-keygen -t rsa -b 4096 -C "dmverges@gmail.com"
+```
+una vez hecho esto nos pedirá un lugar donde guardar nuestras llaves (lo dejamos por defecto)  una passphrase como contraseña para nuestras llaves.
+
+```
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/david/.ssh/id_rsa): 
+Created directory '/home/david/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/david/.ssh/id_rsa
+Your public key has been saved in /home/david/.ssh/id_rsa.pub
+The key fingerprint is:
+
+```
+y ya está creada esto genera en la ruta especificada (/home/tuUser/.ssh) dos archivos:
+1. id_rsa => clave privada
+2. id_rsa.pub => es la llave pública
+
+Para que esto funcione tenemos que asegurarnos que el sistema ssh esté encendido en nuestro computador para ello
+
+```
+eval $(ssh-agent -s)
+Agent pid 5505
+```
+Una vez hemos comprobado que ssh está funcionando hay que decirle que hemos creado una llave y la deje registrada para ello
+
+```
+ssh-add ~/.ssh/id_rsa
+# Identity added: /home/david/.ssh/id_rsa (dmverges@gmail.com)
+```
+
+### crear conexión ssh con github
+
+Copiamos nuestra llave pública y en nuestro perfil de github y en settings damos a ssh and GPG keys y añadimos una llave ssh.
+
+Ahora vamos a nuestro repo y copiamos la url de ssh y en local añadimos remote origin usando la url de ssh.
+en local comprobamos nuestros remotos
+```
+git remote -v
+
+origin  https://github.com/davidMartinVergues/CURSO-GIT-GITHUB.git (fetch)
+origin  https://github.com/davidMartinVergues/CURSO-GIT-GITHUB.git (push)
+```
+ahora editamos el origin
+```
+git remote set-url git@github.com:davidMartinVergues/CURSO-GIT-GITHUB.git
+```
+
+
+
+---
 
 # Curso de Git y GitHub 
 
@@ -315,7 +515,7 @@ git reset *xml
 Una vez sabemos cómo añadir archivos al stage/en seguimiento por git también es importante saber cómo hacer q git olvide estos archivos o dejarlos de seguir para ello usamos el comando
 
 ```
-git rm --cache nombreArchivo
+git rm --cached nombreArchivo
 
 ```
 
