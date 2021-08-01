@@ -11,7 +11,7 @@
   - [Llaves públicas y llaes privadas](#llaves-públicas-y-llaes-privadas)
     - [Generando mis llaves public/private](#generando-mis-llaves-publicprivate)
     - [crear conexión ssh con github](#crear-conexión-ssh-con-github)
-  - [a ver si ahora funciona](#a-ver-si-ahora-funciona)
+  - [nos proguntará la passphrase para la ssh-key y listo](#nos-proguntará-la-passphrase-para-la-ssh-key-y-listo)
 - [Curso de Git y GitHub](#curso-de-git-y-github)
 - [TEMA 1](#tema-1)
   - [¿Cómo funciona GIT?](#cómo-funciona-git)
@@ -306,8 +306,13 @@ ahora editamos el origin
 ```
 git remote set-url git@github.com:davidMartinVergues/CURSO-GIT-GITHUB.git
 ```
-ya tenemos conectado git con github usando ssh.
- a ver si ahora funciona
+
+Al haber añadido una `passphrase` a nuestras llaves ssh cada vez que hacemos un push/pull nos pide esa passphrase así que para que ssh lo guarde y no nos lo ida más hacemos:
+```
+ssh-add
+
+```
+nos proguntará la passphrase para la ssh-key y listo
 ---
 
 # Curso de Git y GitHub 
