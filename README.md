@@ -11,6 +11,7 @@
   - [Llaves públicas y llaes privadas](#llaves-públicas-y-llaes-privadas)
     - [Generando mis llaves public/private](#generando-mis-llaves-publicprivate)
     - [crear conexión ssh con github](#crear-conexión-ssh-con-github)
+  - [a ver si ahora funciona](#a-ver-si-ahora-funciona)
 - [Curso de Git y GitHub](#curso-de-git-y-github)
 - [TEMA 1](#tema-1)
   - [¿Cómo funciona GIT?](#cómo-funciona-git)
@@ -306,8 +307,7 @@ ahora editamos el origin
 git remote set-url git@github.com:davidMartinVergues/CURSO-GIT-GITHUB.git
 ```
 ya tenemos conectado git con github usando ssh.
-
-
+ a ver si ahora funciona
 ---
 
 # Curso de Git y GitHub 
