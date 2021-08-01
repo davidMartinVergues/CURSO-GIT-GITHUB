@@ -305,7 +305,7 @@ ahora editamos el origin
 ```
 git remote set-url git@github.com:davidMartinVergues/CURSO-GIT-GITHUB.git
 ```
-
+ya tenemos conectado git con github usando ssh.
 
 
 ---
