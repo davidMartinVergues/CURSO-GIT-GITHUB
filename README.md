@@ -82,6 +82,13 @@
 
 # Curso GIT y GITHUB Platzi
 
+Instalar git, lo mejor agregar un repo ppa 
+`add-apt-repository ppa:git-core/ppa` 
+actualizamos 
+`apt update`
+instalamos git  
+`apt install git`
+
 ## Flujo básico de trabajo con GIT
 
 ![not found](img/img-38.png)
@@ -90,6 +97,18 @@ Cuando hacemos `git init` en el directorio raíz de nuestro proyecto pasan dos c
 
 1. se crea un espacio en memoria RAM llamado `staging`, donde se irán agregando los cambios es decir cuando hacemos un `git add .`
 2. Se crea un repositorio, es la carpeta `.git` del proyecto, es donde se guardan los cambios definitivos del proyecto los `commits`. El nombre por defecto de la rama principal del repo es `master`. Cuando se hace el commit se le da un identificador.
+
+Actualmente GIT quiere cambiar este nombre de la rama pricipal por el de `main` si queremos que por defecto la rama que se cree se llame main hacemos:
+```
+git config --global init.defaultBranch main
+```
+Ahora cda vez que haga `git init` me creará la rama principal del repo como `main`.
+
+parea renombrar la rama master a main
+
+```
+git branch -m master main
+```
 
 Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y como lo teníamos en la rama master, es decir en el último commit hacemos un `git checkout`.
 
