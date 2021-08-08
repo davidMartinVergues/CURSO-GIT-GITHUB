@@ -112,7 +112,9 @@ git branch -m master main
 
 Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y como lo teníamos en la rama master, es decir en el último commit hacemos un `git checkout`.
 
-La rama principal del repo se llama `master` es donde tenemos la sucesión de todos los commits. Existe un puntero `HEAD` que apunta al commit dnd nos encontramos actualmente, normalmente el último. Ese HEAD se puede mover haciendo un `checkout`
+La rama principal del repo se llama `master` es donde tenemos la sucesión de todos los commits. Existe un puntero `HEAD` que apunta al commit dnd nos encontramos actualmente, normalmente el último. Ese HEAD se puede mover haciendo un `checkout`.
+
+
 
 # RAMAS CONFLICTOS
 
@@ -224,6 +226,7 @@ Ahora me muevo a la otra rama
 ```
 git checkout cabecera
 ```
+Ahora para cambiar entre ramas hay otro comando `git switch`
 
 y hago cambios en los archivos. Al hacer commits de los cambios en la nueva rama, master se queda atrás. Si esos nuevos cambios funcionan bien puedo fusionar master con la rama creada para ello uso un merge desde master. En este caso no habrá problema xq en master no he modificado los archivos en el mismo punto que en la rama nueva así que se relaizará un merge automático .
 
