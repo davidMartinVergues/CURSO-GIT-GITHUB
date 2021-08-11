@@ -82,6 +82,9 @@
 ---
 añado texto
 
+añado otro texto
+git s
+
 # Curso GIT y GITHUB Platzi
 
 Instalar git, lo mejor agregar un repo ppa
