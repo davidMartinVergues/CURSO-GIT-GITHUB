@@ -11,7 +11,8 @@
   - [Llaves públicas y llaes privadas](#llaves-públicas-y-llaes-privadas)
     - [Generando mis llaves public/private](#generando-mis-llaves-publicprivate)
     - [crear conexión ssh con github](#crear-conexión-ssh-con-github)
-  - [nos proguntará la passphrase para la ssh-key y listo](#nos-proguntará-la-passphrase-para-la-ssh-key-y-listo)
+- [Nuevos comandos (makigas)](#nuevos-comandos-makigas)
+  - [git-restore](#git-restore)
 - [Curso de Git y GitHub](#curso-de-git-y-github)
 - [TEMA 1](#tema-1)
   - [¿Cómo funciona GIT?](#cómo-funciona-git)
@@ -226,7 +227,24 @@ Ahora me muevo a la otra rama
 ```
 git checkout cabecera
 ```
-Ahora para cambiar entre ramas hay otro comando `git switch`
+Hay un comando que nos permite ver todas las ramas incluso las del remoto
+
+```
+git branch -a
+```
+Hasta ahora tenemos el comando `checkout`que nos permite cambiar entre ramas y tb deshacer cambios no deseados, por ejemplo añado contenido o creo un archivo que no es correcto para volver a tener el archivo como lo teníamos
+```
+git checkout -- nombreArchivo
+```
+Para hacer las cosas más claras surge 
+```git
+git switch nombreRama # crea una nueva rama
+
+git switch -c nombreRama # crea una nueva rama y nos desplaza a ella seria como un git checkout -b 
+
+git switch --orphan nombreRAma # crea una rama en blanco sin hisorial sin nada normalmente se usa para documentación
+
+```
 
 y hago cambios en los archivos. Al hacer commits de los cambios en la nueva rama, master se queda atrás. Si esos nuevos cambios funcionan bien puedo fusionar master con la rama creada para ello uso un merge desde master. En este caso no habrá problema xq en master no he modificado los archivos en el mismo punto que en la rama nueva así que se relaizará un merge automático .
 
@@ -335,6 +353,18 @@ ssh-add
 
 ```
 nos proguntará la passphrase para la ssh-key y listo
+
+# Nuevos comandos (makigas)
+
+## git-restore
+
+hasta ahora si queríamos deshacer los cambios hacíamos un `git checkout -- nombreArchivo` esto lo que hace es traer ese archivo del working directory de la rama actual y sobreescribe nuestro archivo, es decir deshace los cambios. ahora ha surgido un nuevo comando que hace lo mismo:
+```
+git restore nombreArchivo
+git restore . # revierte todos los cambios efectuados en el repo
+git restore --staged nombreArchivo # revierte todos los cambios cuando ya no estan en mi working directory sino en el stage después de hacer un add
+
+```
 ---
 
 # Curso de Git y GitHub 
