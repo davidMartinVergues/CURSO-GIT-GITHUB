@@ -83,9 +83,9 @@
 
 # Curso GIT y GITHUB Platzi
 
-Instalar git, lo mejor agregar un repo ppa 
-`add-apt-repository ppa:git-core/ppa` 
-actualizamos 
+Instalar git, lo mejor agregar un repo ppa
+`add-apt-repository ppa:git-core/ppa`
+actualizamos
 `apt update`
 instalamos git  
 `apt install git`
@@ -100,9 +100,11 @@ Cuando hacemos `git init` en el directorio raíz de nuestro proyecto pasan dos c
 2. Se crea un repositorio, es la carpeta `.git` del proyecto, es donde se guardan los cambios definitivos del proyecto los `commits`. El nombre por defecto de la rama principal del repo es `master`. Cuando se hace el commit se le da un identificador.
 
 Actualmente GIT quiere cambiar este nombre de la rama pricipal por el de `main` si queremos que por defecto la rama que se cree se llame main hacemos:
+
 ```
 git config --global init.defaultBranch main
 ```
+
 Ahora cda vez que haga `git init` me creará la rama principal del repo como `main`.
 
 parea renombrar la rama master a main
@@ -115,8 +117,6 @@ Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y
 
 La rama principal del repo se llama `master` es donde tenemos la sucesión de todos los commits. Existe un puntero `HEAD` que apunta al commit dnd nos encontramos actualmente, normalmente el último. Ese HEAD se puede mover haciendo un `checkout`.
 
-
-
 # RAMAS CONFLICTOS
 
 ## Definición
@@ -125,9 +125,7 @@ Una rama no es más que una línea del tiempo alterativa a la línea principal (
 Hay tres tipos de merge:
 
 1. Fast-forward => éste se da cuando en la rama master no ha habido ningún cambio desde que se separó la rama secundaria así que simplemente GIT incorpora los cambios a la principal cerrando la secundaria.
-   
 2. Merge automático => es cuando sí ha habido cambios en la rama principal (master) pero no en archivos comunes entre la rama secundaria y master así que git vuelve a incorporar los cambios sin ningún problema.
-   
 3. Merge manual=> en este caso git solicita una solución manual ya que que la rama secundaria ha modificado archivos que también se encuentran en la principal. Así una vez resulete el cnflicto se debe realizar un merge commit.
 
 A estas ramas se les da un nombre para identificarlas por ejemplo rama 'uix del carrito'. Cuando en la rama master se encuentra un bug se suele crear una rama para solucionar ese fallo, normalmente a esa rama se le llama `hotfix` o `bugfixing`. Una vez soolucionado se hace el merge entre master y el hotfix, al finalizar el merge tenemos la última versión de master a esta última versión se le llama `HEAD`.
@@ -209,38 +207,46 @@ y tenemos la situación correcta.
 
 ## Creación de ramas
 
-Nos colocamos en nuestro último commit y creamos una nueva rama, esto creará una copia de nuestro proyecto. 
+Nos colocamos en nuestro último commit y creamos una nueva rama, esto creará una copia de nuestro proyecto.
 
 ```
 git branch cabecera
 ```
-Podemos crear una nueva rama y movernos a ella con 
+
+Podemos crear una nueva rama y movernos a ella con
+
 ```
 git checkout -b nueva_rama
 ```
+
 con esto creo una nueva rama y la situación es la siguiente: tengo el HEAD apuntando al último commit de las ramas master y cabecera y m encuentro en master
 
 ![not found](img/img-45.png)
 
-Ahora me muevo a la otra rama 
+Ahora me muevo a la otra rama
 
 ```
 git checkout cabecera
 ```
+
 Hay un comando que nos permite ver todas las ramas incluso las del remoto
 
 ```
 git branch -a
 ```
+
 Hasta ahora tenemos el comando `checkout`que nos permite cambiar entre ramas y tb deshacer cambios no deseados, por ejemplo añado contenido o creo un archivo que no es correcto para volver a tener el archivo como lo teníamos
+
 ```
 git checkout -- nombreArchivo
 ```
-Para hacer las cosas más claras surge 
+
+Para hacer las cosas más claras surge
+
 ```git
 git switch nombreRama # crea una nueva rama
 
-git switch -c nombreRama # crea una nueva rama y nos desplaza a ella seria como un git checkout -b 
+git switch -c nombreRama # crea una nueva rama y nos desplaza a ella seria como un git checkout -b
 
 git switch --orphan nombreRAma # crea una rama en blanco sin hisorial sin nada normalmente se usa para documentación
 
@@ -252,11 +258,11 @@ y hago cambios en los archivos. Al hacer commits de los cambios en la nueva rama
 git checkout master
 git merge cabecera
 ```
+
 Ahora bien si hago cambios en las mismas líneas de los archivos tanto en la nueva rama como en la master esto entra en conflictos y hay que resolverlos.
 Cuando intente hacer el merge vscode me sacará una pantalla con los cambios de la rama donde estoy y los cambios de la rama que quiero fusionar y tengo que decidir con cual m qdo. Una vez modifico lo que necesito hago un nuevo commit
 
->El merge siempre hay que hacerlo desde master o bien desde la rama que queremos que continue(que quede viva)
-
+> El merge siempre hay que hacerlo desde master o bien desde la rama que queremos que continue(que quede viva)
 
 # Github
 
@@ -286,34 +292,38 @@ git push origin master
 ## Llaves públicas y llaes privadas
 
 Es un sistema para mantener encriptado el envío de información por internet.
-Yo creo enviar datos a un usuario a través de internet. Creo mediante un algortimo matemático una llave pública y otra privada. Ambas forman parte del sistema de descrifrado. Te envío mi llave pública y el receptor codifica su mensaje con mi llave pública y m lo envía y solo con mi llave privada puedo decodificar ese mensaje. 
+Yo creo enviar datos a un usuario a través de internet. Creo mediante un algortimo matemático una llave pública y otra privada. Ambas forman parte del sistema de descrifrado. Te envío mi llave pública y el receptor codifica su mensaje con mi llave pública y m lo envía y solo con mi llave privada puedo decodificar ese mensaje.
 Ahora para realizar lo mismo pero a la inversa y yo crear un mensaje cifrado el receptor tiene que enviarme su llave pública y así se cierra el círculo.
 
 Hasta ahora nos conectábamos con github usando https pero si queremos añadir una capa más de seguridad debemos usar el sistema de llaves públicas/privadas, para ello debemos usar otro protocolo de comunicación `ssh` este tb se usa para comunicarse dos computadoras.
 
-Para poder establecer una comunicación ssh con github tenemos que eviarle nuestra llave pública y github nos devuelve cifrada su llave pública. Este tipo de comunicación se establece por usuario(computadora) no por repo. 
+Para poder establecer una comunicación ssh con github tenemos que eviarle nuestra llave pública y github nos devuelve cifrada su llave pública. Este tipo de comunicación se establece por usuario(computadora) no por repo.
 
 ### Generando mis llaves public/private
 
 Esta llave para usarla con github estará enlazada a un email así que
 gnóthi seautón
+
 ```
 ssh-keygen -t rsa -b 4096 -C "dmverges@gmail.com"
 ```
-una vez hecho esto nos pedirá un lugar donde guardar nuestras llaves (lo dejamos por defecto)  una passphrase como contraseña para nuestras llaves.
+
+una vez hecho esto nos pedirá un lugar donde guardar nuestras llaves (lo dejamos por defecto) una passphrase como contraseña para nuestras llaves.
 
 ```
 Generating public/private rsa key pair.
-Enter file in which to save the key (/home/david/.ssh/id_rsa): 
+Enter file in which to save the key (/home/david/.ssh/id_rsa):
 Created directory '/home/david/.ssh'.
-Enter passphrase (empty for no passphrase): 
-Enter same passphrase again: 
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
 Your identification has been saved in /home/david/.ssh/id_rsa
 Your public key has been saved in /home/david/.ssh/id_rsa.pub
 The key fingerprint is:
 
 ```
+
 y ya está creada esto genera en la ruta especificada (/home/tuUser/.ssh) dos archivos:
+
 1. id_rsa => clave privada
 2. id_rsa.pub => es la llave pública
 
@@ -323,6 +333,7 @@ Para que esto funcione tenemos que asegurarnos que el sistema ssh esté encendid
 eval $(ssh-agent -s)
 Agent pid 5505
 ```
+
 Una vez hemos comprobado que ssh está funcionando hay que decirle que hemos creado una llave y la deje registrada para ello
 
 ```
@@ -336,22 +347,27 @@ Copiamos nuestra llave pública y en nuestro perfil de github y en settings damo
 
 Ahora vamos a nuestro repo y copiamos la url de ssh y en local añadimos remote origin usando la url de ssh.
 en local comprobamos nuestros remotos
+
 ```
 git remote -v
 
 origin  https://github.com/davidMartinVergues/CURSO-GIT-GITHUB.git (fetch)
 origin  https://github.com/davidMartinVergues/CURSO-GIT-GITHUB.git (push)
 ```
+
 ahora editamos el origin
+
 ```
 git remote set-url git@github.com:davidMartinVergues/CURSO-GIT-GITHUB.git
 ```
 
 Al haber añadido una `passphrase` a nuestras llaves ssh cada vez que hacemos un push/pull nos pide esa passphrase así que para que ssh lo guarde y no nos lo ida más hacemos:
+
 ```
 ssh-add
 
 ```
+
 nos proguntará la passphrase para la ssh-key y listo
 
 # Nuevos comandos (makigas)
@@ -359,12 +375,14 @@ nos proguntará la passphrase para la ssh-key y listo
 ## git-restore
 
 hasta ahora si queríamos deshacer los cambios hacíamos un `git checkout -- nombreArchivo` esto lo que hace es traer ese archivo del working directory de la rama actual y sobreescribe nuestro archivo, es decir deshace los cambios. ahora ha surgido un nuevo comando que hace lo mismo:
+
 ```
 git restore nombreArchivo
 git restore . # revierte todos los cambios efectuados en el repo
 git restore --staged nombreArchivo # revierte todos los cambios cuando ya no estan en mi working directory sino en el stage después de hacer un add
 
 ```
+
 ---
 
 # Curso de Git y GitHub 
@@ -708,7 +726,7 @@ git reset README.md
 
 ![not found](img/img-15.png)
 
-Y lo volvemos a la versión anterior con checkout – nombreArchvo
+Y lo volvemos a la versión anterior con checkout –- nombreArchvo
 
 ```
 git checkout -- README.md
