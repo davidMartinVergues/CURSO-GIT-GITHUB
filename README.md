@@ -189,7 +189,6 @@ Si esto lo dejamos así git eliminará esa rama en la que se encuentra HEAD y pe
 git branch nueva_rama b2e51c9
 
 ```
-
 ![not found](img/img-43.png)
 
 nos movemos a master y fusionamos ramas.
@@ -386,7 +385,11 @@ git restore . # revierte todos los cambios efectuados en el repo
 git restore --staged nombreArchivo # revierte todos los cambios cuando ya no estan en mi working directory sino en el stage después de hacer un add
 
 ```
+Podemos ver los arhivos que está en el stage, es decir les hemos hecho el `git add ` antes del commit
 
+```
+git diff --name-only --cached
+```
 ---
 
 # Curso de Git y GitHub 
@@ -702,6 +705,8 @@ git diff --staged
 Para entender el diff (comparación):
 
 ![not found](img/img-14.png)
+
+puedo usar diff para comarar dos commits ` git diff commit1 commit2` escrito de este modo cogerá como base el primer commit y lo comparará al segundo, de tal modo que me pondrá en rojo lo que "sobra" del commit1 y en verde lo que añadiría del commit2.
 
 En verde o con el + / b es como está el archivo de la rama donde nos encontramos, es decir con los cambios  
 En rojo o con el - / a es como estaba el archivo en el último commit
