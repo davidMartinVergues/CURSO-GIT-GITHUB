@@ -298,7 +298,15 @@ Es un sistema para mantener encriptado el envío de información por internet.
 Yo creo enviar datos a un usuario a través de internet. Creo mediante un algortimo matemático una llave pública y otra privada. Ambas forman parte del sistema de descrifrado. Te envío mi llave pública y el receptor codifica su mensaje con mi llave pública y m lo envía y solo con mi llave privada puedo decodificar ese mensaje.
 Ahora para realizar lo mismo pero a la inversa y yo crear un mensaje cifrado el receptor tiene que enviarme su llave pública y así se cierra el círculo.
 
-Hasta ahora nos conectábamos con github usando https pero si queremos añadir una capa más de seguridad debemos usar el sistema de llaves públicas/privadas, para ello debemos usar otro protocolo de comunicación `ssh` este tb se usa para comunicarse dos computadoras.
+Hasta ahora nos conectábamos con github usando https pero si queremos añadir una capa más de seguridad debemos usar el sistema de llaves públicas/privadas, para ello debemos usar otro protocolo de comunicación `
+
+
+
+
+
+
+
+` este tb se usa para comunicarse dos computadoras.
 
 Para poder establecer una comunicación ssh con github tenemos que eviarle nuestra llave pública y github nos devuelve cifrada su llave pública. Este tipo de comunicación se establece por usuario(computadora) no por repo.
 
@@ -361,7 +369,7 @@ origin  https://github.com/davidMartinVergues/CURSO-GIT-GITHUB.git (push)
 ahora editamos el origin
 
 ```
-git remote set-url git@github.com:davidMartinVergues/CURSO-GIT-GITHUB.git
+git remote set-url origin git@github.com:davidMartinVergues/CURSO-GIT-GITHUB.git
 ```
 
 Al haber añadido una `passphrase` a nuestras llaves ssh cada vez que hacemos un push/pull nos pide esa passphrase así que para que ssh lo guarde y no nos lo ida más hacemos:
