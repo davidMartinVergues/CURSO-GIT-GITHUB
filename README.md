@@ -7,10 +7,12 @@
     - [git rm](#git-rm)
     - [git reset](#git-reset)
   - [Creación de ramas](#creación-de-ramas)
+    - [Enviar ramas a github](#enviar-ramas-a-github)
 - [Github](#github)
   - [Llaves públicas y llaes privadas](#llaves-públicas-y-llaes-privadas)
     - [Generando mis llaves public/private](#generando-mis-llaves-publicprivate)
     - [crear conexión ssh con github](#crear-conexión-ssh-con-github)
+  - [Tags](#tags)
 - [Nuevos comandos (makigas)](#nuevos-comandos-makigas)
   - [git-restore](#git-restore)
 - [Curso de Git y GitHub](#curso-de-git-y-github)
@@ -35,6 +37,7 @@
 - [TEMA 3 - RAMAS CONFLICTOS Y TAGS](#tema-3---ramas-conflictos-y-tags)
   - [Definición](#definición-1)
     - [Fast-forwars](#fast-forwars)
+- [Tags o etiquetas](#tags-o-etiquetas)
 - [Comandos útiles](#comandos-útiles)
   - [config -l](#config--l)
   - [config --global](#config---global)
@@ -267,6 +270,41 @@ Cuando intente hacer el merge vscode me sacará una pantalla con los cambios de 
 
 > El merge siempre hay que hacerlo desde master o bien desde la rama que queremos que continue(que quede viva)
 
+### Enviar ramas a github
+
+PAra ver las ramas en local hacemos
+```git
+git branch
+```
+Si queremos ver también las ramas que tenemos en remoto hacemos
+
+```git
+git show-branch --all
+```
+si queremos mandar una rama a github simplemente hacemos un push de la rama en cuestión
+
+```git
+git push origin nombreRama
+```
+
+Si queremos eliminar una rama en local hacemos
+
+```git
+git branch -d nombre_rama
+```
+si la rama tiene trabajos sin fusionar y aún así queremos forzar su borrado hacemos:
+
+```git
+git branch -D nombre_rama
+```
+
+Si queremos traernos una rama de github 
+
+```git
+git pull origin nombreRaman
+```
+
+
 # Github
 
 Podemos crear un repositorio en github y enlazar ese repo con el nuestro local para ello:
@@ -372,6 +410,33 @@ ssh-add
 ```
 
 nos proguntará la passphrase para la ssh-key y listo
+
+## Tags
+
+Se pueden marcar los diferentes commits con tags para por ejemplo indicar una versión de nuestro proyecto. Para crear un tag:
+
+```git
+git tag -a v0.1 -m "añado un tag al commit" hashCommit
+```
+Para ver la lista de tags q tenemos:
+
+```git
+git show-ref --tags
+```
+Los tags son útilites sobre todo en github para que los colaboradores sepan en que versión estamos. Una vez añadido el tag debemos subirlo al repo remoto para ello:
+
+```git
+git push origin --tags
+```
+
+Para borrar un tag hacemos:
+
+```git
+git tag -d nombreDelTag
+
+git push origin --tags
+git push origin :refs/tags/nombreDelTag # para q lo borre github
+```
 
 # Nuevos comandos (makigas)
 
@@ -1041,10 +1106,13 @@ Así es como se ven los archivos modificados pero no mergeados (UU ) y hago el c
 
 Ya he fusionado ambas ramas y arreglado los conflictos, ahora borramos la rama secundaria.
 
-Tags o etiquetas
+# Tags o etiquetas
 
-Son referencias a un commit en concreto, simplemente les damos un nombre a esos commit pej v 1.0.1. Sirven para marcar versiones o release.
+Son referencias a un commit en concreto, simplemente les damos un nombre a esos commit pej v1.0.1. Sirven para marcar versiones o release.
+
 Para crear un tag y añadir un mensaje asociado a ese tag hacemos:
+
+
 
 Y en el log ya vemos el tag
 
