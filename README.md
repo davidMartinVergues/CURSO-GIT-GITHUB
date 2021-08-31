@@ -83,6 +83,7 @@
 - [Tema 5 Undoing mistakes](#tema-5-undoing-mistakes)
 
 ---
+
 añado texto
 
 añado otro texto
@@ -192,6 +193,7 @@ Si esto lo dejamos así git eliminará esa rama en la que se encuentra HEAD y pe
 git branch nueva_rama b2e51c9
 
 ```
+
 ![not found](img/img-43.png)
 
 nos movemos a master y fusionamos ramas.
@@ -273,14 +275,17 @@ Cuando intente hacer el merge vscode me sacará una pantalla con los cambios de 
 ### Enviar ramas a github
 
 PAra ver las ramas en local hacemos
+
 ```git
 git branch
 ```
+
 Si queremos ver también las ramas que tenemos en remoto hacemos
 
 ```git
 git show-branch --all
 ```
+
 si queremos mandar una rama a github simplemente hacemos un push de la rama en cuestión
 
 ```git
@@ -292,18 +297,18 @@ Si queremos eliminar una rama en local hacemos
 ```git
 git branch -d nombre_rama
 ```
+
 si la rama tiene trabajos sin fusionar y aún así queremos forzar su borrado hacemos:
 
 ```git
 git branch -D nombre_rama
 ```
 
-Si queremos traernos una rama de github 
+Si queremos traernos una rama de github
 
 ```git
 git pull origin nombreRaman
 ```
-
 
 # Github
 
@@ -337,12 +342,6 @@ Yo creo enviar datos a un usuario a través de internet. Creo mediante un algort
 Ahora para realizar lo mismo pero a la inversa y yo crear un mensaje cifrado el receptor tiene que enviarme su llave pública y así se cierra el círculo.
 
 Hasta ahora nos conectábamos con github usando https pero si queremos añadir una capa más de seguridad debemos usar el sistema de llaves públicas/privadas, para ello debemos usar otro protocolo de comunicación `
-
-
-
-
-
-
 
 ` este tb se usa para comunicarse dos computadoras.
 
@@ -426,11 +425,13 @@ Se pueden marcar los diferentes commits con tags para por ejemplo indicar una ve
 ```git
 git tag -a v0.1 -m "añado un tag al commit" hashCommit
 ```
+
 Para ver la lista de tags q tenemos:
 
 ```git
 git show-ref --tags
 ```
+
 Los tags son útilites sobre todo en github para que los colaboradores sepan en que versión estamos. Una vez añadido el tag debemos subirlo al repo remoto para ello:
 
 ```git
@@ -458,11 +459,13 @@ git restore . # revierte todos los cambios efectuados en el repo
 git restore --staged nombreArchivo # revierte todos los cambios cuando ya no estan en mi working directory sino en el stage después de hacer un add
 
 ```
+
 Podemos ver los arhivos que está en el stage, es decir les hemos hecho el `git add ` antes del commit
 
 ```
 git diff --name-only --cached
 ```
+
 ---
 
 # Curso de Git y GitHub 
@@ -725,6 +728,12 @@ Generar alias de forma global
 
 ```
 git config --global alias.lg "log --oneline --decorate --all –-graph"
+```
+
+uno más completo
+
+```
+lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
 ```
 
 ```
@@ -1119,8 +1128,6 @@ Ya he fusionado ambas ramas y arreglado los conflictos, ahora borramos la rama s
 Son referencias a un commit en concreto, simplemente les damos un nombre a esos commit pej v1.0.1. Sirven para marcar versiones o release.
 
 Para crear un tag y añadir un mensaje asociado a ese tag hacemos:
-
-
 
 Y en el log ya vemos el tag
 
