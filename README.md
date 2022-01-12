@@ -2,6 +2,7 @@
   - [Flujo básico de trabajo con GIT](#flujo-básico-de-trabajo-con-git)
 - [RAMAS CONFLICTOS](#ramas-conflictos)
   - [Definición](#definición)
+  - [merge de un archivo concreto](#merge-de-un-archivo-concreto)
   - [ejemplo práctico](#ejemplo-práctico)
   - [git reset y git rm](#git-reset-y-git-rm)
     - [git rm](#git-rm)
@@ -80,6 +81,8 @@
   - [git push --delete origin branch_name_here](#git-push---delete-origin-branch_name_here)
   - [git rebase branch_name_here](#git-rebase-branch_name_here)
   - [git push -f](#git-push--f)
+  - [git remote set-url](#git-remote-set-url)
+  - [git remote rm](#git-remote-rm)
 - [Tema 5 Undoing mistakes](#tema-5-undoing-mistakes)
 
 ---
@@ -137,6 +140,13 @@ Hay tres tipos de merge:
 3. Merge manual=> en este caso git solicita una solución manual ya que que la rama secundaria ha modificado archivos que también se encuentran en la principal. Así una vez resulete el cnflicto se debe realizar un merge commit.
 
 A estas ramas se les da un nombre para identificarlas por ejemplo rama 'uix del carrito'. Cuando en la rama master se encuentra un bug se suele crear una rama para solucionar ese fallo, normalmente a esa rama se le llama `hotfix` o `bugfixing`. Una vez soolucionado se hace el merge entre master y el hotfix, al finalizar el merge tenemos la última versión de master a esta última versión se le llama `HEAD`.
+
+## merge de un archivo concreto
+
+```
+git checkout --patch otherbranch folder1/update.txt
+```
+sto abrirá un asistente para repasar cada parte del códigoe ir aceptando cambios
 
 ## ejemplo práctico
 
@@ -677,6 +687,12 @@ git rm --cached nombreArchivo
 
 ```
 
+si queremos q deje de seguir un directorio 
+
+```
+git rm -r --cached nombre_directorio
+```
+después de dejarlos de seguir añadimos al gitignore para q no nos lo suba al repo
 ## Como revisar el log
 
 > USAMOS: log --oneline --decorate --all –-graph status -s -b
@@ -2036,8 +2052,21 @@ This command will force a push request. This is usually fine for pull request br
 But this isn't something that you want to do with public repos.
 
 ```
-
 git push -f
+```
+## git remote set-url
+
+cambiamos la url de un repo remoto
+
+```
+git remote set-url origin git@github.com:dmartin-projects/dmartin_projects.git
+```
+## git remote rm
+
+si queremos eliminar la url de un remoto, no elimina el repositorio asociado solo la url
+
+```
+git remote rm heroku-web
 ```
 
 # Tema 5 Undoing mistakes
