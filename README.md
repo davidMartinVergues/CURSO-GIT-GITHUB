@@ -40,6 +40,7 @@
     - [Fast-forwars](#fast-forwars)
 - [Tags o etiquetas](#tags-o-etiquetas)
 - [Comandos útiles](#comandos-útiles)
+- [git branch -M main](#git-branch--m-main)
   - [config -l](#config--l)
   - [config --global](#config---global)
   - [git init](#git-init)
@@ -121,8 +122,13 @@ Ahora cda vez que haga `git init` me creará la rama principal del repo como `ma
 parea renombrar la rama master a main
 
 ```
-git branch -m master main
+git branch -M master main
+# or  
+git branch -M main (situado en master)
+
 ```
+
+Para poder hacer este cambio la rama necesita tener un commit hecho.
 
 Cuando hemos cometido un error y queremos recuperar ese archivo o proyecto tal y como lo teníamos en la rama master, es decir en el último commit hacemos un `git checkout`.
 
@@ -400,6 +406,8 @@ ssh-add ~/.ssh/id_rsa
 ```
 
 ### crear conexión ssh con github
+
+Ahora git solo funciona con conexión ssh así que debemos hacer esto para cada nuevo pc que usemos.
 
 Copiamos nuestra llave pública y en nuestro perfil de github y en settings damos a ssh and GPG keys y añadimos una llave ssh.
 
@@ -1507,6 +1515,14 @@ Si nos preocupa que la contraseña quede guardada en el disco duro, podemos util
 $ git config --global credential.helper 'cache --timeout=86400'
 
 # Comandos útiles
+
+# git branch -M main 
+
+Para cambiar el nombre de una rama, primero necesitamos que esa rama tenga commits luego:
+
+```
+git branch -M main
+```
 
 ## config -l
 
