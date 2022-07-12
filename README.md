@@ -769,6 +769,16 @@ Lo que va detrás del punto en alias es cómo se llamará mi alias, en este caso
 Para ver todas las configuraciones que vamos haciendo a nivel global hacemos un
 `git config --global -e` ó también `git config –global -l`
 
+Alias usados 
+
+```
+[alias]
+        lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green>
+        s = status -s -b
+
+```
+
+
 # TEMA 2
 
 ## Uso de diff
